@@ -7,12 +7,12 @@ const InteractiveBackground: React.FC = () => {
 
     useEffect(() => {
         const sketch = (p: p5) => {
-            const nodes: backgroundNode[] = [];
-            const numNodes = 100;
-            const nodeRadius = 15;
-            const thickness = 2;
-            const edgeDistance = 150;
-            const speed = 1;
+            const nodes : backgroundNode[] = [];
+            const numNodes : number = 100;
+            const nodeRadius : number = 15;
+            const thickness : number = 2;
+            const edgeDistance : number = 150;
+            const speed : number = 1;
 
             const getRandomColor = (): p5.Color =>
                 p.color(p.random(255), p.random(255), p.random(255));
@@ -36,7 +36,7 @@ const InteractiveBackground: React.FC = () => {
                     canvas.parent(canvasRef.current);
                 }
 
-                for (let i = 0; i < numNodes; i++) {
+                for (let i : number = 0; i < numNodes; i++) {
                     nodes.push(createNode(canvasWidth, canvasHeight));
                 }
             };
@@ -47,7 +47,7 @@ const InteractiveBackground: React.FC = () => {
 
                 p.background(200, 240, 255);
 
-                for (let i = 0; i < nodes.length; ++i) {
+                for (let i : number = 0; i < nodes.length; ++i) {
                     nodes[i].x += nodes[i].xVelocity;
                     nodes[i].y += nodes[i].yVelocity;
 
@@ -64,15 +64,15 @@ const InteractiveBackground: React.FC = () => {
 
                 p.stroke(0);
                 p.strokeWeight(thickness);
-                for (let i = 0; i < nodes.length; ++i) {
-                    for (let j = 1; j < nodes.length; ++j) {
+                for (let i : number = 0; i < nodes.length; ++i) {
+                    for (let j : number = 1; j < nodes.length; ++j) {
                         if (p.dist(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y) < edgeDistance) {
                             p.line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
                         }
                     }
                 }
 
-                for (let i = 0; i < nodes.length; ++i) {
+                for (let i : number = 0; i < nodes.length; ++i) {
                     p.fill(nodes[i].color);
                     p.stroke(0);
                     p.strokeWeight(thickness);
