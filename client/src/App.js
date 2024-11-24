@@ -1,6 +1,10 @@
+import LoginPage from "./pages/LoginPage.js";
+
 const App = () => {
   return (
-    <div></div>
+    <div>
+      <LoginPage/>
+    </div>
   );
 }
 
