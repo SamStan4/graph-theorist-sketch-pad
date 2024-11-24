@@ -6,23 +6,30 @@ const NodeBackgroundComponent = () => {
 
     useEffect(() => {
         const sketch = (p) => {
-            const nodeList = []         // the list of nodes in the background
-            const numNodes = 50         // the number of nodes in the background
-            const nodeRadius = 15;      // the radius of the nodes (size)
-            const thickness = 2;        // the thickness of the node boarder and edges
-            const edgeDistance = 150;   // the distance at which we create an edge
-            const speed = 1;            // the speed the nodes will be going
+            const nodeList = []           // the list of nodes in the background
+            const numNodes = 50           // the number of nodes in the background
+            const nodeRadius = 15;        // the radius of the nodes (size)
+            const thickness = 2;          // the thickness of the node boarder and edges
+            const edgeDistance = 150;     // the distance at which we create an edge
+            const speed = 1;              // the speed the nodes will be going
+            const repulsionRadius = 100;  // mouse repulsion radius
+            const repulsionForce = 5;     // the strength of mouse repulsion
+            const damp = 0.95;            // friction slow down
 
             const getRandColor = () => {
                 return p.color(p.random(255), p.random(255), p.random(255));
             }
 
             const makeNewNode = (canvasWidth, canvasHeight) => {
+                const randX = p.random(-1, 1) * speed;
+                const randY = p.random(-1, 1) * speed;                
                 return {
                     x       : p.random(nodeRadius, canvasWidth - nodeRadius),
                     y       : p.random(nodeRadius, canvasHeight - nodeRadius),
-                    vx      : p.random(-1 * speed, speed),
-                    vy      : p.random(-1 * speed, speed),
+                    vx0     : randX,
+                    vy0     : randY,
+                    vx      : randX,
+                    vy      : randY,
                     radius  : nodeRadius,
                     color   : getRandColor(),
                 }
@@ -48,6 +55,12 @@ const NodeBackgroundComponent = () => {
 
                 // collision detection loop
                 nodeList.forEach((node) => {
+                    // node.vx *= damp;
+                    // node.vy *= damp;
+
+                    // node.vx += (node.vx0 - node.vx) * 0.05;
+                    // node.vy += (node.vy0 - node.vy) * 0.05;
+
                     node.x += node.vx;
                     node.y += node.vy;
 
@@ -60,6 +73,16 @@ const NodeBackgroundComponent = () => {
                         node.vy *= -1;
                         node.color = getRandColor();
                     }
+
+                    // const dx = node.x - p.mouseX;
+                    // const dy = node.y - p.mouseY;
+                    // const dist = Math.sqrt((dx * dx) + (dy * dy));
+                    // if (dist < repulsionRadius) {
+                    //     const angle = Math.atan2(dy, dx);
+                    //     const force = (repulsionRadius - dist) / repulsionRadius * repulsionForce;
+                    //     node.vx += Math.cos(angle) * force;
+                    //     node.vy += Math.sin(angle) * force;
+                    // }
                 });
 
                 // drawing edges loop

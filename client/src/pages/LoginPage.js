@@ -2,7 +2,9 @@ import NodeBackgroundComponent from "./../componets/NodeBackgroundComponet.js";
 
 const LoginPage = () => {
     return (
-        <NodeBackgroundComponent/>
+        <div>
+            <NodeBackgroundComponent/>
+        </div>
     );
 }
 
