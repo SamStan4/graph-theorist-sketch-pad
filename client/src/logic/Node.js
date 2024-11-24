@@ -5,7 +5,7 @@ class Node {
 
     constructor(newName, newX, newY) {
         if (typeof newX != 'number' || typeof newY != 'number') {
-            throw new Error("x and y position of node must be numberic");
+            throw new Error("x and y position of node must be numeric");
         }
         this.name = newName;
         this.x = newX;
@@ -13,11 +13,11 @@ class Node {
     }
 
     toJSON() {
-        return JSON.stringify({
+        return {
             name : this.name,
             x : this.x,
             y : this.y
-        });
+        }
     }
 }
 
