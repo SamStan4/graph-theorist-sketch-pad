@@ -4,7 +4,7 @@ import makeSampleGraph from "./../logic/Samples.js";
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeSampleGraph());
-  const updateGraph = (updateNodes) => {
+  const updateNodePosition = (updateNodes) => {
     console.log("updating the graph");
   }
 
@@ -27,48 +27,83 @@ const GraphEditPage = () => {
 
 
   return (
-    <div style={{ display: "flex", height: "100vh"}}>
-      {/* left sidebar goes here */}
-      <div
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        backgroundColor: "#FFFFFF"
+      }}
+    >
+      {/* NAVBAR */}
+      <nav
         style={{
-          width: "20%",
-          backgroundColor: "#f4f4f4",
-          padding: "10px",
-          boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)"
-        }}
-      >
-        <h2>Graph Tools</h2>
-      </div>
-      {/* Graph viewport */}
-      <div
-        style={{
-          flex: 1,
+          backgroundColor: "#007BFF",
+          color: "white",
+          padding: "10px 20px",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
+          justifyContent: "space-between",
+          boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
         }}
       >
+        <h1
+          style={{margin: 0}}
+          onClick={() => alert("hello there ;)")}
+        >
+          Graph Theorist Sketch Pad
+        </h1>
+      </nav>
+      {/* MAIN CONTENT */}
+      <div
+        style={{
+          display:"flex",
+          flex:1
+        }}
+      >
+        {/* LEFT SIDEBAR */}
         <div
           style={{
-            width: `${viewportSize}px`,
-            height: `${viewportSize}px`,
-            border: "1px solid #ddd",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)"
+            width:"20%",
+            backgroundColor: "#f4f4f4",
+            padding: "10px",
+            boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)"
           }}
         >
-          <GraphCanvas graph={graph} updateGraph={updateGraph}/>
+          <h2>Graph Tools</h2>
         </div>
-      </div>
-      {/* right sidebar here */}
-      <div
-        style={{
-          width: "20%",
-          backgroundColor: "#f4f4f4",
-          padding: "10px",
-          boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.1)"
-        }}
-      >
-        <h2>Graph Properties</h2>
+        {/* GRAPH CANVAS VIEWPORT */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              width: `${viewportSize}px`,
+              height: `${viewportSize}px`,
+              border: "1px solid #ddd",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <GraphCanvas graph={graph} updateNodePosition={updateNodePosition}/>
+          </div>
+        </div>
+
+        {/* RIGHT SIDEBAR */}
+        <div
+          style={{
+            width: "20%",
+            backgroundColor: "#f4f4f4",
+            padding: "10px",
+            boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <h2>Properties</h2>
+        </div>
       </div>
     </div>
   );
