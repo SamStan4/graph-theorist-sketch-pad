@@ -66,12 +66,12 @@ const NodeBackgroundComponent = () => {
 
                     if (node.x - node.radius <= 0 || node.x + node.radius >= canvasWidth) {
                         node.vx *= -1;
-                        node.color = getRandColor();
+                        // node.color = getRandColor();
                     }
 
                     if (node.y - node.radius <= 0 || node.y + node.radius >= canvasHeight) {
                         node.vy *= -1;
-                        node.color = getRandColor();
+                        // node.color = getRandColor();
                     }
 
                     // const dx = node.x - p.mouseX;
@@ -86,6 +86,7 @@ const NodeBackgroundComponent = () => {
                 });
 
                 // drawing edges loop
+                // TODO: use spatial partitioning algorithm to make this faster
                 p.stroke(0);
                 p.strokeWeight(thickness);
                 for (let i = 0; i < nodeList.length; ++i) {

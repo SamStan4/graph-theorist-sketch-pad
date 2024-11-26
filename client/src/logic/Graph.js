@@ -9,6 +9,12 @@ class Graph {
         this.edges = new Map();
     }
 
+    /**
+     * 
+     * @param { string } name 
+     * @param { number } x 
+     * @param { number } y 
+     */
     addNode(name, x, y) {
         if (this.nodes.has(name)) {
             throw new Error(`ERROR - [Graph.constructor] - node with name ${name} already exsists in the graph`);
@@ -66,15 +72,17 @@ class Graph {
     }
 
     toJSON() {
-        const serializedNodes = Array.from(this.nodes.values()).map(node => JSON.parse(node.toJSON()));
+        const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
         const serializedEdges = {};
+
         for (const [node, neighbors] of this.edges.entries()) {
             serializedEdges[node] = Array.from(neighbors);
         }
-        return JSON.stringify({
-            nodes : serializedNodes,
-            edges : serializedEdges
-        });
+        
+        return {
+            nodes: serializedNodes,
+            edges: serializedEdges
+        };
     }
 }
 
