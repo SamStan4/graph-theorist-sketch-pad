@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import GraphCanvas from "./../componets/GraphCanvas.js";
-import makeSampleGraph from "./../logic/Samples.js";
+import GraphCanvas from "../componets/GraphCanvas.js";
+import makeSampleGraph from "../logic/Samples.js";
 import GraphProperties from '../componets/GraphProperties.js';
 
 const GraphEditPage = () => {

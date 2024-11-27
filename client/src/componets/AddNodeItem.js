@@ -32,9 +32,9 @@ const AddNodeItem = ({ onAdd }) => {
     >
       <input
         type="text"
-        // onChange={(e) => setNewNodeName(e.target.value)}
-        // value={newNodeName}
-        // placeholder="new vertex here"
+        value={newNodeName}
+        onChange={(e) => setNewNodeName(e.target.value)} // Handle user input
+        placeholder="New vertex here"
         style={{
           padding: "4px 6px",
           border: "1px solid #ccc",

@@ -26,7 +26,8 @@ const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge }) => {
         style={{
           display: "flex",
           flex: 1,
-          backgroundColor: "#00FFFF"
+          backgroundColor: "#00FFFF",
+          overflow: "auto",
         }}
       >
         <NodeColumn
