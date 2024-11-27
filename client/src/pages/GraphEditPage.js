@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import GraphCanvas from "./../componets/GraphCanvas.js";
 import makeSampleGraph from "./../logic/Samples.js";
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeSampleGraph());
+  const graphCanvasContainerRef = useRef(null);
+
   const updateNodePosition = (updateNodes) => {
     console.log("updating the graph");
+  }
+
+  const addNode = (nodeName) => {
+    if (graph.nodes.has(nodeName)) {
+      alert(`${nodeName} already exists`);
+      return;
+    }
+    const maxWidth = graphCanvasContainerRef.current.offsetWidth;
+    const maxHeight = graphCanvasContainerRef.current.offsetHeight;
+
   }
 
   const [viewportSize, setViewportSize] = useState(0);
@@ -24,7 +36,6 @@ const GraphEditPage = () => {
       window.removeEventListener("resize", updateSize);
     }
   }, []);
-
 
   return (
     <div
@@ -82,6 +93,7 @@ const GraphEditPage = () => {
           }}
         >
           <div
+            REF={graphCanvasContainerRef}
             style={{
               width: `${viewportSize}px`,
               height: `${viewportSize}px`,

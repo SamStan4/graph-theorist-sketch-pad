@@ -51,10 +51,11 @@ const GraphCanvas = ({graph, updateNodePosition}) => {
         });
 
         p.stroke(0);
-        p.strokeWeight(thickness);
         graph.nodes.forEach((node) => {
+          p.strokeWeight(thickness);
           p.fill(255);
           p.ellipse(node.x, node.y, vertexDiameter, vertexDiameter);
+          p.strokeWeight(1);
           p.fill(0);
           p.text(node.name, node.x, node.y);
         });
@@ -74,7 +75,6 @@ const GraphCanvas = ({graph, updateNodePosition}) => {
       p.mouseReleased = (event) => {
         event.preventDefault();
         if (draggedNode) {
-          // TODO : update nodeposition
           setDraggingNode(null);
           draggedNode = null;
         }
