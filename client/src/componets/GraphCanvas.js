@@ -36,7 +36,6 @@ const GraphCanvas = ({graph, updateNodePosition}) => {
 
       p.draw = () => {
         p.background(255);
-
         // draw edges
         p.stroke(0);
         p.strokeWeight(thickness);

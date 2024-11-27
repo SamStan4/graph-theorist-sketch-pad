@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import GraphCanvas from "./../componets/GraphCanvas.js";
 import makeSampleGraph from "./../logic/Samples.js";
+import GraphProperties from '../componets/GraphProperties.js';
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeSampleGraph());
@@ -73,16 +74,7 @@ const GraphEditPage = () => {
         }}
       >
         {/* LEFT SIDEBAR */}
-        <div
-          style={{
-            width:"20%",
-            backgroundColor: "#f4f4f4",
-            padding: "10px",
-            boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)"
-          }}
-        >
-          <h2>Graph Tools</h2>
-        </div>
+        <GraphProperties graph={graph}/>
         {/* GRAPH CANVAS VIEWPORT */}
         <div
           style={{
