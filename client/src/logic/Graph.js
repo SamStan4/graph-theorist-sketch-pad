@@ -9,12 +9,15 @@ class Graph {
         this.edges = new Map();
     }
 
-    /**
-     * 
-     * @param { string } name 
-     * @param { number } x 
-     * @param { number } y 
-     */
+    clone() {
+        const clonedGraph = new Graph();
+        clonedGraph.nodes = new Map(this.nodes);
+        clonedGraph.edges = new Map(
+            [...this.edges].map(([key, value]) => [key, new Set(value)])
+        );
+        return clonedGraph;
+    }
+
     addNode(name, x, y) {
         if (this.nodes.has(name)) {
             throw new Error(`ERROR - [Graph.constructor] - node with name ${name} already exsists in the graph`);

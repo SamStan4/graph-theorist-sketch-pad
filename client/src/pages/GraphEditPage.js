@@ -12,13 +12,13 @@ const GraphEditPage = () => {
   }
 
   const removeNode = (nodeName) => {
-    const newGraph = graph;
+    const newGraph = graph.clone();
     newGraph.removeNode(nodeName);
     setGraph(newGraph);
   }
 
   const removeEdge = (nodeOne, nodeTwo) => {
-    const newGraph = graph;
+    const newGraph = graph.clone();
     newGraph.removeEdge(nodeOne, nodeTwo);
     setGraph(newGraph);
   }
