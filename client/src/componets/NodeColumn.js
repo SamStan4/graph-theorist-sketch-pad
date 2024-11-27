@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import NodeItem from "./NodeItem.js";
+import AddNodeItem from "./AddNodeItem.js";
 
 const NodeColumn = ({ graph, onRemove }) => {
   const [nodes, setNodes] = useState(graph.getNodeList());
 
   useEffect(() => {
     setNodes(graph.getNodeList());
-  });
+  }, [graph]);
 
   const handleRemoveNodes = (nodeName) => {
     onRemove(nodeName);
     setNodes(Array.from(graph.nodes.keys()));
+  }
+
+  const handleAddNode = (nodeName) => {
+    alert("adding ndoe", nodeName);
   }
 
   return (
@@ -27,6 +32,9 @@ const NodeColumn = ({ graph, onRemove }) => {
       >
         Vertices
       </h3>
+      <AddNodeItem
+        onAdd={handleAddNode}
+      />
       {nodes.map((nodeName, index) => (
         <NodeItem
           key={index}
