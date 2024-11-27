@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import NodeItem from "./NodeItem.js";
 import AddNodeItem from "./AddNodeItem.js";
 
-const NodeColumn = ({ graph, onRemove }) => {
+const NodeColumn = ({ graph, onRemove, onAdd }) => {
   const [nodes, setNodes] = useState(graph.getNodeList());
 
   useEffect(() => {
@@ -11,11 +11,12 @@ const NodeColumn = ({ graph, onRemove }) => {
 
   const handleRemoveNodes = (nodeName) => {
     onRemove(nodeName);
-    setNodes(Array.from(graph.nodes.keys()));
+    setNodes(graph.getNodeList());
   }
 
   const handleAddNode = (nodeName) => {
-    alert("adding ndoe", nodeName);
+    onAdd(nodeName);
+    setNodes(graph.getNodeList());
   }
 
   return (

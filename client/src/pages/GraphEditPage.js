@@ -24,13 +24,24 @@ const GraphEditPage = () => {
   }
 
   const addNode = (nodeName) => {
-    if (graph.nodes.has(nodeName)) {
-      alert(`${nodeName} already exists`);
+    if (graph.hasNode(nodeName)) {
+      alert(`vertex with name ${nodeName} already exists`);
+      return;
+    } else if (nodeName.length > 15) {
+      alert(`vertex name too large`);
       return;
     }
     const maxWidth = graphCanvasContainerRef.current.offsetWidth;
     const maxHeight = graphCanvasContainerRef.current.offsetHeight;
+    const randX = Math.random() * maxWidth;
+    const randY = Math.random() * maxHeight;
+    const newGraph = graph.clone();
+    newGraph.addNode(nodeName, randX, randY);
+    setGraph(newGraph);
+  }
 
+  const addEdge = (nodeOne, nodeTwo) => {
+    console.log("adding an edge");
   }
 
   const [viewportSize, setViewportSize] = useState(0);
@@ -90,6 +101,7 @@ const GraphEditPage = () => {
           graph={graph}
           onRemoveNode={removeNode}
           onRemoveEdge={removeEdge}
+          onAddNode={addNode}
         />
         {/* GRAPH CANVAS VIEWPORT */}
         <div
@@ -101,7 +113,7 @@ const GraphEditPage = () => {
           }}
         >
           <div
-            REF={graphCanvasContainerRef}
+            ref={graphCanvasContainerRef}
             style={{
               width: `${viewportSize}px`,
               height: `${viewportSize}px`,

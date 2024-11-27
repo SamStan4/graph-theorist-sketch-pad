@@ -90,6 +90,11 @@ class Graph {
         return Array.from(this.nodes.keys());
     }
 
+    hasNode(node) {
+        const nodeName = typeof node === 'string' ? node : node.name;
+        return this.nodes.has(nodeName);
+    }
+
     toJSON() {
         const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
         const serializedEdges = {};
