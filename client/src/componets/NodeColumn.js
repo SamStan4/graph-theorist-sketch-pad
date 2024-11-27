@@ -1,9 +1,18 @@
+import { useEffect, useState } from "react";
 import NodeItem from "./NodeItem.js";
 
-const NodeColumn = ({ graph }) => {
-  const temp = (item) => {
-    console.log(`removing ${item}`);
-  } 
+const NodeColumn = ({ graph, onRemove }) => {
+  const [nodes, setNodes] = useState(graph.getNodeList());
+
+  useEffect(() => {
+    setNodes(graph.getNodeList());
+  });
+
+  const handleRemoveNodes = (nodeName) => {
+    onRemove(nodeName);
+    setNodes(Array.from(graph.nodes.keys()));
+  }
+
   return (
     <div
       style={{
@@ -18,11 +27,11 @@ const NodeColumn = ({ graph }) => {
       >
         Vertices
       </h3>
-      {Array.from(graph.nodes.keys()).map((key) => (
+      {nodes.map((nodeName, index) => (
         <NodeItem
-          key={key}
-          nodeName={key}
-          onRemove={temp}
+          key={index}
+          nodeName={nodeName}
+          onRemove={handleRemoveNodes}
         />
       ))}
     </div>

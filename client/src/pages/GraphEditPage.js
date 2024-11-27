@@ -11,6 +11,18 @@ const GraphEditPage = () => {
     console.log("updating the graph");
   }
 
+  const removeNode = (nodeName) => {
+    const newGraph = graph;
+    newGraph.removeNode(nodeName);
+    setGraph(newGraph);
+  }
+
+  const removeEdge = (nodeOne, nodeTwo) => {
+    const newGraph = graph;
+    newGraph.removeEdge(nodeOne, nodeTwo);
+    setGraph(newGraph);
+  }
+
   const addNode = (nodeName) => {
     if (graph.nodes.has(nodeName)) {
       alert(`${nodeName} already exists`);
@@ -74,7 +86,11 @@ const GraphEditPage = () => {
         }}
       >
         {/* LEFT SIDEBAR */}
-        <GraphProperties graph={graph}/>
+        <GraphProperties
+          graph={graph}
+          onRemoveNode={removeNode}
+          onRemoveEdge={removeEdge}
+        />
         {/* GRAPH CANVAS VIEWPORT */}
         <div
           style={{

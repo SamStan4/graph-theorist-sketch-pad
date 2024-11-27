@@ -5,13 +5,13 @@ const NodeItem = ({ nodeName, onRemove }) => {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "4px 6px", // Reduced padding
-      marginBottom: "4px", // Reduced margin
+      padding: "4px 6px",
+      marginBottom: "4px",
       backgroundColor: "#f9f9f9",
       border: "1px solid #ddd",
-      borderRadius: "4px", // Slightly smaller radius
+      borderRadius: "4px",
       fontFamily: "'Roboto', sans-serif",
-      fontSize: "12px", // Reduced font size
+      fontSize: "12px"
     }}
     >
       <span>{nodeName}</span>

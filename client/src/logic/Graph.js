@@ -71,6 +71,22 @@ class Graph {
         return Array.from(this.edges.get(nodeName));
     }
 
+    getEdgeList() {
+        const edgeSet = new Set();
+        for (const [nodeName, neighbors] of this.edges.entries()) {
+            for (const neighborName of neighbors) {
+                if (nodeName < neighborName) {
+                    edgeSet.add([nodeName, neighborName].sort().join('±'))
+                }
+            }
+        }
+        return Array.from(edgeSet).map(edge => edge.split('±'));
+    }
+
+    getNodeList() {
+        return Array.from(this.nodes.keys());
+    }
+
     toJSON() {
         const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
         const serializedEdges = {};
