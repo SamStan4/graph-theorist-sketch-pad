@@ -125,6 +125,18 @@ class Graph {
         }
     }
 
+    getNodeCount() {
+        return this.nodes.size;
+    }
+
+    getEdgeCount() {
+        let edgeCount = 0;
+        for (const neighbors of this.edges.values()) {
+            edgeCount += neighbors.size;
+        }
+        return edgeCount / 2;
+    }
+
     toJSON() {
         const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
         const serializedEdges = {};
