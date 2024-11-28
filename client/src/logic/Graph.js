@@ -95,6 +95,36 @@ class Graph {
         return this.nodes.has(nodeName);
     }
 
+    // TODO : implement this
+    getNumComponents() {
+        const visited = new Set();
+        let count = 0;
+        for (const node of this.nodes.keys()) {
+            if (!visited.has(node)) {
+                this.#getNumComponentsHelper(node, visited);
+                ++count;
+            }
+        }
+        return count;
+    }
+
+    #getNumComponentsHelper(node, visited) {
+        const stack = [node];
+        while(stack.length > 0) {
+            const currentNode = stack.pop();
+            if (visited.has(currentNode)) {
+                continue;
+            }
+            visited.add(currentNode);
+            for (const neighbor of this.edges.get(currentNode)) {
+                if (visited.has(neighbor)) {
+                    continue;
+                }
+                stack.push(neighbor);
+            }
+        }
+    }
+
     toJSON() {
         const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
         const serializedEdges = {};

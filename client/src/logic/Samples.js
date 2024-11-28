@@ -10,10 +10,7 @@ const makeSampleGraph = () => {
     graph.addNode("2", 250, 500);
     graph.addNode("3", 500, 250);
     graph.addNode("4", 600, 600);
-    graph.addNode("5", 200, 200);
-    graph.addNode("6", 200, 200);
-    graph.addNode("7", 200, 200);
-    graph.addNode("8", 200, 200);
+    graph.addNode("5", 100, 500)
     graph.addEdge("1", "2");
     graph.addEdge("1", "2");
     graph.addEdge("1", "2");

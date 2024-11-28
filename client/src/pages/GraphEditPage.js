@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import GraphCanvas from "../componets/GraphCanvas.js";
 import makeSampleGraph from "../logic/Samples.js";
 import GraphProperties from '../componets/GraphProperties.js';
+import GraphStats from '../componets/GraphStats.js';
+import Navbar from '../componets/Navbar.js'
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeSampleGraph());
@@ -83,24 +85,7 @@ const GraphEditPage = () => {
       }}
     >
       {/* NAVBAR */}
-      <nav
-        style={{
-          backgroundColor: "#007BFF",
-          color: "white",
-          padding: "10px 20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h1
-          style={{margin: 0}}
-          onClick={() => alert("hello there ;)")}
-        >
-          Graph Theorist Sketch Pad
-        </h1>
-      </nav>
+      <Navbar/>
       {/* MAIN CONTENT */}
       <div
         style={{
@@ -137,18 +122,10 @@ const GraphEditPage = () => {
             <GraphCanvas graph={graph} updateNodePosition={updateNodePosition}/>
           </div>
         </div>
-
         {/* RIGHT SIDEBAR */}
-        <div
-          style={{
-            width: "20%",
-            backgroundColor: "#f4f4f4",
-            padding: "10px",
-            boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <h2>Properties</h2>
-        </div>
+        <GraphStats
+          graph={graph}
+        />
       </div>
     </div>
   );
