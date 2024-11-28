@@ -13,7 +13,7 @@ const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode, onAddEd
         flexDirection: "column"
       }}
     >
-      <h2
+      {/* <h2
         style={{
           textAlign: "center",
           margin: "0",
@@ -21,7 +21,7 @@ const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode, onAddEd
         }}
       >
         Graph Properties
-      </h2>
+      </h2> */}
       <div
         style={{
           display: "flex",
