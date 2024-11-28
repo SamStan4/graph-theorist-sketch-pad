@@ -26,7 +26,6 @@ const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode, onAddEd
         style={{
           display: "flex",
           flex: 1,
-          backgroundColor: "#00FFFF",
           overflow: "auto",
         }}
       >

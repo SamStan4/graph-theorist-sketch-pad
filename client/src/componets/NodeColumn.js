@@ -22,14 +22,17 @@ const NodeColumn = ({ graph, onRemove, onAdd }) => {
   return (
     <div
       style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         width: "50%",
-        flex: 1
+        flex: 1,
       }}
-    >
+      >
       <h3
         style={{
-          textAlign: "center"
-        }}
+          textAlign: "center",
+       }}
       >
         Vertices
       </h3>

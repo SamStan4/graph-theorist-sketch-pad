@@ -16,10 +16,13 @@ const EdgeColumn = ({ graph, onRemove, onAdd }) => {
 
     return (
       <div
-        style={{
-          width: "50%",
-          flex: 1
-        }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "50%",
+        flex: 1,
+      }}
       >
         <h3
           style={{

@@ -25,7 +25,7 @@ const AddNodeItem = ({ onAdd }) => {
         borderRadius: "4px",
         fontFamily: "'Roboto', sans-serif",
         fontSize: "12px",
-        width: "100%",
+        width: "95%",
         boxSizing: "border-box",
         pointerEvents: "auto"
       }}

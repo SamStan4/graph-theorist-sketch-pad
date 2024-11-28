@@ -11,6 +11,7 @@ const EdgeItem = ({ nodeOne, nodeTwo, onRemove }) => {
         border: "1px solid #ddd",
         borderRadius: "4px",
         fontFamily: "'Roboto', sans-serif",
+        width: "calc(100% - 25px)",
         fontSize: "12px"
       }}
     >
