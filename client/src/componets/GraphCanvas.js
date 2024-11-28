@@ -36,7 +36,6 @@ const GraphCanvas = ({graph, updateNodePosition}) => {
 
       p.draw = () => {
         p.background(255);
-
         // draw edges
         p.stroke(0);
         p.strokeWeight(thickness);
@@ -61,8 +60,7 @@ const GraphCanvas = ({graph, updateNodePosition}) => {
         });
       }
 
-      p.mousePressed = (event) => {
-        event.preventDefault();
+      p.mousePressed = () => {
         const foundNode = Array.from(graph.nodes.values()).find(
           (node) => p.dist(p.mouseX, p.mouseY, node.x, node.y) < 15
         );
@@ -72,16 +70,14 @@ const GraphCanvas = ({graph, updateNodePosition}) => {
         }
       }
 
-      p.mouseReleased = (event) => {
-        event.preventDefault();
+      p.mouseReleased = () => {
         if (draggedNode) {
           setDraggingNode(null);
           draggedNode = null;
         }
       }
 
-      p.mouseDragged = (event) => {
-        event.preventDefault();
+      p.mouseDragged = () => {
         if (draggedNode != null) {
           const newX = p.constrain(p.mouseX, vertexRadius, p.width - vertexRadius);
           const newY = p.constrain(p.mouseY, vertexRadius, p.height - vertexRadius);

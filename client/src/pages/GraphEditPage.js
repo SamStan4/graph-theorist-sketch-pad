@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import GraphCanvas from "./../componets/GraphCanvas.js";
-import makeSampleGraph from "./../logic/Samples.js";
+import GraphCanvas from "../componets/GraphCanvas.js";
+import makeSampleGraph from "../logic/Samples.js";
+import GraphProperties from '../componets/GraphProperties.js';
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeSampleGraph());
@@ -10,14 +11,49 @@ const GraphEditPage = () => {
     console.log("updating the graph");
   }
 
+  const removeNode = (nodeName) => {
+    const newGraph = graph.clone();
+    newGraph.removeNode(nodeName);
+    setGraph(newGraph);
+  }
+
+  const removeEdge = (nodeOne, nodeTwo) => {
+    const newGraph = graph.clone();
+    newGraph.removeEdge(nodeOne, nodeTwo);
+    setGraph(newGraph);
+  }
+
   const addNode = (nodeName) => {
-    if (graph.nodes.has(nodeName)) {
-      alert(`${nodeName} already exists`);
+    if (graph.hasNode(nodeName)) {
+      alert(`vertex with name ${nodeName} already exists`);
+      return;
+    } else if (nodeName.length > 15) {
+      alert(`vertex name too large`);
       return;
     }
     const maxWidth = graphCanvasContainerRef.current.offsetWidth;
     const maxHeight = graphCanvasContainerRef.current.offsetHeight;
+    const randX = Math.random() * maxWidth;
+    const randY = Math.random() * maxHeight;
+    const newGraph = graph.clone();
+    newGraph.addNode(nodeName, randX, randY);
+    setGraph(newGraph);
+  }
 
+  const addEdge = (nodeOne, nodeTwo) => {
+    if (!graph.hasNode(nodeOne) || !graph.hasNode(nodeTwo)) {
+      if (!graph.hasNode(nodeOne) && !graph.hasNode(nodeTwo)) {
+        alert(`${nodeOne} and ${nodeTwo} do not exist`);
+      } else if (!graph.hasNode(nodeOne)) {
+        alert(`${nodeOne} does not exist`);
+      } else {
+        alert(`${nodeTwo} does not exist`);
+      }
+      return;
+    }
+    const newGraph = graph.clone();
+    newGraph.addEdge(nodeOne, nodeTwo);
+    setGraph(newGraph);
   }
 
   const [viewportSize, setViewportSize] = useState(0);
@@ -73,16 +109,13 @@ const GraphEditPage = () => {
         }}
       >
         {/* LEFT SIDEBAR */}
-        <div
-          style={{
-            width:"20%",
-            backgroundColor: "#f4f4f4",
-            padding: "10px",
-            boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)"
-          }}
-        >
-          <h2>Graph Tools</h2>
-        </div>
+        <GraphProperties
+          graph={graph}
+          onRemoveNode={removeNode}
+          onRemoveEdge={removeEdge}
+          onAddNode={addNode}
+          onAddEdge={addEdge}
+        />
         {/* GRAPH CANVAS VIEWPORT */}
         <div
           style={{
@@ -93,7 +126,7 @@ const GraphEditPage = () => {
           }}
         >
           <div
-            REF={graphCanvasContainerRef}
+            ref={graphCanvasContainerRef}
             style={{
               width: `${viewportSize}px`,
               height: `${viewportSize}px`,

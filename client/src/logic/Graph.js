@@ -9,12 +9,15 @@ class Graph {
         this.edges = new Map();
     }
 
-    /**
-     * 
-     * @param { string } name 
-     * @param { number } x 
-     * @param { number } y 
-     */
+    clone() {
+        const clonedGraph = new Graph();
+        clonedGraph.nodes = new Map(this.nodes);
+        clonedGraph.edges = new Map(
+            [...this.edges].map(([key, value]) => [key, new Set(value)])
+        );
+        return clonedGraph;
+    }
+
     addNode(name, x, y) {
         if (this.nodes.has(name)) {
             throw new Error(`ERROR - [Graph.constructor] - node with name ${name} already exsists in the graph`);
@@ -69,6 +72,27 @@ class Graph {
         }
 
         return Array.from(this.edges.get(nodeName));
+    }
+
+    getEdgeList() {
+        const edgeSet = new Set();
+        for (const [nodeName, neighbors] of this.edges.entries()) {
+            for (const neighborName of neighbors) {
+                if (nodeName < neighborName) {
+                    edgeSet.add([nodeName, neighborName].sort().join('±'))
+                }
+            }
+        }
+        return Array.from(edgeSet).map(edge => edge.split('±'));
+    }
+
+    getNodeList() {
+        return Array.from(this.nodes.keys());
+    }
+
+    hasNode(node) {
+        const nodeName = typeof node === 'string' ? node : node.name;
+        return this.nodes.has(nodeName);
     }
 
     toJSON() {
