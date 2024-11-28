@@ -1,7 +1,7 @@
 import NodeColumn from "./NodeColumn.js";
 import EdgeColumn from "./EdgeColumn.js";
 
-const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode }) => {
+const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode, onAddEdge }) => {
   return (
     <div
       style={{
@@ -38,6 +38,7 @@ const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode }) => {
         <EdgeColumn
           graph={graph}
           onRemove={onRemoveEdge}
+          onAdd={onAddEdge}
         />
       </div>
     </div>

@@ -41,7 +41,19 @@ const GraphEditPage = () => {
   }
 
   const addEdge = (nodeOne, nodeTwo) => {
-    console.log("adding an edge");
+    if (!graph.hasNode(nodeOne) || !graph.hasNode(nodeTwo)) {
+      if (!graph.hasNode(nodeOne) && !graph.hasNode(nodeTwo)) {
+        alert(`${nodeOne} and ${nodeTwo} do not exist`);
+      } else if (!graph.hasNode(nodeOne)) {
+        alert(`${nodeOne} does not exist`);
+      } else {
+        alert(`${nodeTwo} does not exist`);
+      }
+      return;
+    }
+    const newGraph = graph.clone();
+    newGraph.addEdge(nodeOne, nodeTwo);
+    setGraph(newGraph);
   }
 
   const [viewportSize, setViewportSize] = useState(0);
@@ -102,6 +114,7 @@ const GraphEditPage = () => {
           onRemoveNode={removeNode}
           onRemoveEdge={removeEdge}
           onAddNode={addNode}
+          onAddEdge={addEdge}
         />
         {/* GRAPH CANVAS VIEWPORT */}
         <div
