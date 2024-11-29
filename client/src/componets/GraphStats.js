@@ -26,6 +26,7 @@ const GraphStats = ({ graph }) => {
       <BipartiteStat
         graph={graph}
       />
+      <LineSeparator/>
     </div>
   );
 }
