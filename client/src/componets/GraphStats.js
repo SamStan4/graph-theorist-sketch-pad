@@ -1,6 +1,7 @@
 import LineSeparator from "./LineSeparator";
 import ComponentStat from "./ComponentStat";
 import VertexEdgeCount from "./VertexEdgeCount";
+import BipartiteStat from "./BipartiteStat";
 
 const GraphStats = ({ graph }) => {
   return (
@@ -19,6 +20,10 @@ const GraphStats = ({ graph }) => {
       />
       <LineSeparator/>
       <VertexEdgeCount
+        graph={graph}
+      />
+      <LineSeparator/>
+      <BipartiteStat
         graph={graph}
       />
     </div>

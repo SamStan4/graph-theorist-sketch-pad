@@ -137,6 +137,41 @@ class Graph {
         return edgeCount / 2;
     }
 
+    isBipartite() {
+        const colorMap = new Map();
+   
+        const bfs = (start) => {
+            const queue = [start];
+            colorMap.set(start, 0);
+   
+            while (queue.length > 0) {
+                const curNode = queue.shift();
+                const curColor = colorMap.get(curNode);
+   
+                for (const neighbor of this.edges.get(curNode)) {
+                    if (!colorMap.has(neighbor)) {
+                        colorMap.set(neighbor, 1 - curColor);
+                        queue.push(neighbor);
+                    } else if (colorMap.get(neighbor) === curColor) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+   
+        for (const nodeName of this.nodes.keys()) {
+            if (!colorMap.has(nodeName)) {
+                if (!bfs(nodeName)) {
+                    return false;
+                }
+            }
+        }
+   
+        return true;
+    }
+ 
+
     toJSON() {
         const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
         const serializedEdges = {};
