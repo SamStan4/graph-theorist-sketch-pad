@@ -170,7 +170,45 @@ class Graph {
    
         return true;
     }
- 
+
+    getBridges() {
+        const visited = new Set();
+        const disc = new Map();
+        const low = new Map();
+        const parent = new Map();
+        const bridges = [];
+        let time = 0;
+    
+        const dfs = (u) => {
+            visited.add(u);
+            disc.set(u, time);
+            low.set(u, time);
+            ++time;
+    
+            for (const v of this.edges.get(u)) {
+                if (!visited.has(v)) {
+                    parent.set(v, u);
+                    dfs(v);
+    
+                    low.set(u, Math.min(low.get(u), low.get(v)));
+    
+                    if (low.get(v) > disc.get(u)) {
+                        bridges.push([u, v]);
+                    }
+                } else if (v !== parent.get(u)) {
+                    low.set(u, Math.min(low.get(u), disc.get(v)));
+                }
+            }
+        };
+    
+        for (const node of this.nodes.keys()) {
+            if (!visited.has(node)) {
+                dfs(node);
+            }
+        }
+    
+        return bridges;
+    }
 
     toJSON() {
         const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
