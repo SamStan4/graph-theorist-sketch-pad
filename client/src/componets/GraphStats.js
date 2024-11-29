@@ -2,8 +2,9 @@ import LineSeparator from "./LineSeparator";
 import ComponentStat from "./ComponentStat";
 import VertexEdgeCount from "./VertexEdgeCount";
 import BipartiteStat from "./BipartiteStat";
+import ShowBridges from "./ShowBridges";
 
-const GraphStats = ({ graph }) => {
+const GraphStats = ({ graph, onShowBridgeToggle }) => {
   return (
     <div
       style={{
@@ -27,6 +28,9 @@ const GraphStats = ({ graph }) => {
         graph={graph}
       />
       <LineSeparator/>
+      <ShowBridges
+        onToggle={onShowBridgeToggle}
+      />
     </div>
   );
 }

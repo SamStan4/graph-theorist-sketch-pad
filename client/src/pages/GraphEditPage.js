@@ -7,10 +7,15 @@ import Navbar from '../componets/Navbar.js'
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeSampleGraph());
+  const [showBridges, setShowBridges] = useState(false);
   const graphCanvasContainerRef = useRef(null);
 
   const updateNodePosition = (updateNodes) => {
     console.log("updating the graph");
+  }
+
+  const toggleShowBridges = (newState) => {
+    setShowBridges(newState);
   }
 
   const removeNode = (nodeName) => {
@@ -119,12 +124,17 @@ const GraphEditPage = () => {
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <GraphCanvas graph={graph} updateNodePosition={updateNodePosition}/>
+            <GraphCanvas
+              graph={graph}
+              updateNodePosition={updateNodePosition}
+              showBridges={showBridges}
+            />
           </div>
         </div>
         {/* RIGHT SIDEBAR */}
         <GraphStats
           graph={graph}
+          onShowBridgeToggle={toggleShowBridges}
         />
       </div>
     </div>

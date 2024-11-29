@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import p5 from 'p5';
 import Graph from '../logic/Graph';
 
-const GraphCanvas = ({graph, updateNodePosition}) => {
+const GraphCanvas = ({graph, updateNodePosition, showBridges}) => {
   const thickness = 2;
   const vertexDiameter = 30;
   const vertexRadius = vertexDiameter / 2;
@@ -48,6 +48,18 @@ const GraphCanvas = ({graph, updateNodePosition}) => {
             }
           })
         });
+
+        if (showBridges) {
+          p.stroke(255, 0, 0);
+          p.strokeWeight(thickness + 1);
+          for (const [nodeOneName, nodeTwoName] of graph.getBridges()) {
+            const nodeOne = graph.nodes.get(nodeOneName);
+            const nodeTwo = graph.nodes.get(nodeTwoName);
+            if (nodeOne && nodeTwo) {
+              p.line(nodeOne.x, nodeOne.y, nodeTwo.x, nodeTwo.y);
+            }
+          }
+        }
 
         p.stroke(0);
         graph.nodes.forEach((node) => {
