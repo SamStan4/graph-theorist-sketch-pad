@@ -1,84 +1,79 @@
 import React, { useState, useEffect, useRef } from 'react';
-import GraphCanvas from "../componets/GraphCanvas.js";
-import makeSampleGraph from "../logic/Samples.js";
-import GraphProperties from '../componets/GraphProperties.js';
-import GraphStats from '../componets/GraphStats.js';
-import Navbar from '../componets/Navbar.js'
+import makeRandomGraph from './../logic/RandomGraph.js';
+import Navbar from "./../componets/Navbar.js"
+import GraphCanvas from './../componets/GraphCanvas.js';
 
 const GraphEditPage = () => {
-  const [graph, setGraph] = useState(makeSampleGraph());
+  const [graph, setGraph] = useState(makeRandomGraph());
   const [showBridges, setShowBridges] = useState(false);
-  const graphCanvasContainerRef = useRef(null);
-
-  const updateNodePosition = (updateNodes) => {
-    console.log("updating the graph");
-  }
-
-  const toggleShowBridges = (newState) => {
-    setShowBridges(newState);
-  }
-
-  const removeNode = (nodeName) => {
-    const newGraph = graph.clone();
-    newGraph.removeNode(nodeName);
-    setGraph(newGraph);
-  }
-
-  const removeEdge = (nodeOne, nodeTwo) => {
-    const newGraph = graph.clone();
-    newGraph.removeEdge(nodeOne, nodeTwo);
-    setGraph(newGraph);
-  }
-
-  const addNode = (nodeName) => {
-    if (graph.hasNode(nodeName)) {
-      alert(`vertex with name ${nodeName} already exists`);
-      return;
-    } else if (nodeName.length > 15) {
-      alert(`vertex name too large`);
-      return;
-    }
-    const maxWidth = graphCanvasContainerRef.current.offsetWidth;
-    const maxHeight = graphCanvasContainerRef.current.offsetHeight;
-    const randX = Math.random() * maxWidth;
-    const randY = Math.random() * maxHeight;
-    const newGraph = graph.clone();
-    newGraph.addNode(nodeName, randX, randY);
-    setGraph(newGraph);
-  }
-
-  const addEdge = (nodeOne, nodeTwo) => {
-    if (!graph.hasNode(nodeOne) || !graph.hasNode(nodeTwo)) {
-      if (!graph.hasNode(nodeOne) && !graph.hasNode(nodeTwo)) {
-        alert(`${nodeOne} and ${nodeTwo} do not exist`);
-      } else if (!graph.hasNode(nodeOne)) {
-        alert(`${nodeOne} does not exist`);
-      } else {
-        alert(`${nodeTwo} does not exist`);
-      }
-      return;
-    }
-    const newGraph = graph.clone();
-    newGraph.addEdge(nodeOne, nodeTwo);
-    setGraph(newGraph);
-  }
-
+  const [showMST, setShowMST] = useState(false);
+  const [applyPhysics, setApplyPhysics] = useState(true);
   const [viewportSize, setViewportSize] = useState(0);
 
   useEffect(() => {
     const updateSize = () => {
-      const maxDimension = Math.min(window.innerWidth * 0.6, window.innerHeight * 0.8)
-      setViewportSize(maxDimension);
+      const maxDimension = Math.min(window.innerWidth * 0.6, window.innerHeight * 0.8);
+      setViewportSize(maxDimension); 
     }
-
     updateSize();
-
     window.addEventListener("resize", updateSize);
-
     return () => {
       window.removeEventListener("resize", updateSize);
     }
   }, []);
+
+  const toggleShowBridges = () => {
+    setShowBridges(!showBridges);
+  }
+
+  const toggleShowMST = () => {
+    setShowMST(!showMST);
+  }
+
+  const toggleApplyPhysics = () => {
+    setApplyPhysics(!applyPhysics);
+  }
+
+  const deleteVertex = (vertex) => {
+    const graphCpy = graph.clone();
+    graphCpy.deleteVertex(vertex);
+    setGraph(graphCpy);
+  }
+
+  const deleteEdge = (vertexOne, vertexTwo) => {
+    const graphCpy = graph.clone();
+    graphCpy.removeEdge(vertexOne, vertexTwo);
+    setGraph(graphCpy);
+  }
+
+  const addVertex = (vertexName) => {
+    if (graph.hasVertex(vertexName)) {
+      alert(`vertex with name ${vertexName} already exists`);
+      return;
+    } else if (vertexName.length > 15) {
+      alert(`vertex names are a max of 15 characters`);
+      return;
+    }
+    const graphCpy = graph.clone();
+    graphCpy.addVertex(vertexName);
+    setGraph(graphCpy);
+  }
+
+  const addEdge = (vertexOneName, vertexTwoName) => {
+    if (!graph.hasVertex(vertexOneName) || !graph.hasVertex(vertexTwoName)) {
+      if (!graph.hasVertex(vertexOneName) && !graph.hasVertex(vertexTwoName)) {
+        alert(`${vertexOneName} and ${vertexTwoName} do not exist`);
+      } else if (!graph.hasVertex(vertexOneName)) {
+        alert(`${vertexOneName} does not exist`);
+      } else {
+        alert(`${vertexTwoName} does not exist`);
+      }
+      return;
+    }
+    const graphCpy = graph.clone();
+    graphCpy.addEdge(vertexOneName, vertexTwoName);
+    setGraph(graphCpy);
+  }
 
   return (
     <div
@@ -89,7 +84,6 @@ const GraphEditPage = () => {
         backgroundColor: "#FFFFFF"
       }}
     >
-      {/* NAVBAR */}
       <Navbar/>
       {/* MAIN CONTENT */}
       <div
@@ -98,47 +92,16 @@ const GraphEditPage = () => {
           flex:1
         }}
       >
-        {/* LEFT SIDEBAR */}
-        <GraphProperties
+        <GraphCanvas
           graph={graph}
-          onRemoveNode={removeNode}
-          onRemoveEdge={removeEdge}
-          onAddNode={addNode}
-          onAddEdge={addEdge}
-        />
-        {/* GRAPH CANVAS VIEWPORT */}
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            ref={graphCanvasContainerRef}
-            style={{
-              width: `${viewportSize}px`,
-              height: `${viewportSize}px`,
-              border: "1px solid #ddd",
-              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <GraphCanvas
-              graph={graph}
-              updateNodePosition={updateNodePosition}
-              showBridges={showBridges}
-            />
-          </div>
-        </div>
-        {/* RIGHT SIDEBAR */}
-        <GraphStats
-          graph={graph}
-          onShowBridgeToggle={toggleShowBridges}
+          showBridges={showBridges}
+          showMST={showMST}
+          applyPhysics={applyPhysics}
+          sideLength={viewportSize}
         />
       </div>
     </div>
-  );
+  )
 }
 
 export default GraphEditPage;

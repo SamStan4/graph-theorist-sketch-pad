@@ -1,239 +1,287 @@
-import Node from "./Node.js"
+import Vertex from "./Vertex.js";
 
-class Graph {
-    nodes;
+/**
+ * Class for representing a graph.
+ */
+export default class Graph {
+    /**
+     * @type {Map<string, Vertex>} A map of vertex names to vertex objects.
+     */
+    vertices;
+    /**
+     * @type {Map<string, Set<string>>} A map of vertex names to sets of connected vertices (edges).
+     */
     edges;
+    /**
+     * @type {Set<string>} A set of vertex names that have loops (edges to themselves).
+     */
     loops;
 
+    /**
+     * Initializes the graph.
+     */
     constructor() {
-        this.nodes = new Map();
+        this.vertices = new Map();
         this.edges = new Map();
-        this.loops = new Set();
+        this.loops = new Set;
     }
 
+    /**
+     * Clone method for helping with state management.
+     * @returns { Graph } A copy of the graph.
+     */
     clone() {
         const clonedGraph = new Graph();
-        clonedGraph.nodes = new Map(this.nodes);
+        clonedGraph.vertices = new Map(this.vertices);
         clonedGraph.edges = new Map(
             [...this.edges].map(([key, value]) => [key, new Set(value)])
         );
+        clonedGraph.loops = new Set(this.loops);
         return clonedGraph;
     }
 
-    addNode(name, x, y) {
-        if (this.nodes.has(name)) {
-            throw new Error(`ERROR - [Graph.constructor] - node with name ${name} already exsists in the graph`);
+    /**
+     * Adds a node to the graph in a random position.
+     * @param { string } name 
+     */
+    addVertexRandomPosition(name) {
+        if (this.vertices.has(name)) {
+            throw new Error(`graph already has vertex with name ${name}`);
         }
-        const node = new Node(name, x, y);
-        this.nodes.set(name, node);
+        const randX = Math.floor(Math.random() * 101);
+        const randY = Math.floor(Math.random() * 101);
+        const newVertex = new Vertex(name, randX, randY);
+        this.vertices.set(name, newVertex);
         this.edges.set(name, new Set());
     }
 
-    removeNode (name) {
-        if (!this.nodes.has(name)) {
-            return;
+    /**
+     * Adds an edge to the graph.
+     * @param { Vertex | string } vertexOne 
+     * @param { Vertex | string } vertexTwo 
+     */
+    addEdge(vertexOne, vertexTwo) {
+        const nodeOneName = typeof vertexOne === 'string' ? vertexOne : vertexOne.vertexName;
+        const nodeTwoName = typeof vertexTwo === 'string' ? vertexTwo : vertexTwo.vertexName;
+        if (!this.vertices.has(nodeOneName) || !this.vertices.has(nodeTwoName)) {
+            throw new Error(`one or both vertices does not exist`);
         }
-
-        this.edges.get(name).forEach((adjacentNode) => {
-            this.edges.get(adjacentNode).delete(name);
-        });
-
-        this.nodes.delete(name);
-        this.edges.delete(name);
-    }
-
-    addEdge(nodeOne, nodeTwo) {
-        const nodeOneName = typeof nodeOne === 'string' ? nodeOne : nodeOne.name;
-        const nodeTwoName = typeof nodeTwo === 'string' ? nodeTwo : nodeTwo.name;
-
-        if (!this.nodes.has(nodeOneName) || !this.nodes.has(nodeTwoName)) {
-            throw new Error(`ERROR - [Graph.addEdge] - one or both nodes do not exist`);
-        }
-
-        if (nodeOneName !== nodeTwoName) {
+        if (nodeOneName == nodeTwoName) {
+            this.loops.add(nodeOneName);
+        } else {
             this.edges.get(nodeOneName).add(nodeTwoName);
             this.edges.get(nodeTwoName).add(nodeOneName);
+        }
+    }
+
+    /**
+     * Removes a vertex from the graph.
+     * @param { Vertex | string } vertexName 
+     */
+    removeVertex(vertex) {
+        const vertexName = typeof vertex === "string" ? vertex : vertex.vertexName;
+        if (this.vertices.has(vertexName)) {
+            this.edges.get(vertexName).forEach((neighbor) => {
+                this.edges.get(neighbor).delete(vertexName);
+            });
+            this.loops.delete(vertexName);
+            this.vertices.delete(vertexName);
+            this.edges.delete(vertexName);
+        }
+    }
+
+    /**
+     * Deletes an edge from the graph
+     * @param { Vertex | string } vertexOne 
+     * @param { Vertex | string } vertexTwo 
+     */
+    removeEdge(vertexOne, vertexTwo) {
+        const nodeOneName = typeof vertexOne === 'string' ? vertexOne : vertexOne.vertexName;
+        const nodeTwoName = typeof vertexTwo === 'string' ? vertexTwo : vertexTwo.vertexName;
+        if (!this.vertices.has(nodeOneName) || !this.vertices.has(nodeTwoName)) {
+            throw new Error(`one or both vertices does not exist`);
+        }
+        if (nodeOneName == nodeTwoName) {
+            this.loops.delete(nodeOneName);
         } else {
-            this.loops.add(nodeOneName);
-            console.log("adding a loop");
+            this.edges.get(nodeOneName).delete(nodeTwoName);
+            this.edges.get(nodeTwoName).delete(nodeOneName);
         }
     }
-
-    removeEdge(nodeOne, nodeTwo) {
-        const nodeOneName = typeof nodeOne === 'string' ? nodeOne : nodeOne.name;
-        const nodeTwoName = typeof nodeTwo === 'string' ? nodeTwo : nodeTwo.name;
-
-        if (!this.nodes.has(nodeOneName) || !this.nodes.has(nodeTwoName)) {
-            throw new Error(`ERROR - [Graph.removeEdge] - one or both nodes do not exist`);
+    
+    /**
+     * Gets the degree of a vertex :)
+     * @param { Vertex | string } vertex 
+     * @returns { number } represenging the degree of the vertex
+     */
+    getVertexDegree(vertex) {
+        const vertexName = typeof vertex === "string" ? vertex : vertex.vertexName;
+        if (!this.vertices.has(vertexName)) {
+            throw new Error(`vertex with name ${vertexName} does not exist`);
         }
-
-        this.edges.get(nodeOneName).delete(nodeTwoName);
-        this.edges.get(nodeTwoName).delete(nodeOneName);
+        return this.edges.get(vertexName).size + (this.loops.has(vertexName) ? 1 : 0);
     }
 
-    getNeighbors(node) {
-        const nodeName = typeof node === 'string' ? node : node.name;
-        
-        if (!this.edges.has(nodeName)) {
-            throw new Error(`ERROR - [Graph.getNeighbors] - ${nodeName} does not exist`);
-        }
-
-        return Array.from(this.edges.get(nodeName));
-    }
-
-    getEdgeList() {
+    /**
+     * Gets all edges in the graph. Represents the vertices with their names.
+     * @returns {Array<string[]>}
+     */
+    getAllEdgeNames() {
         const edgeSet = new Set();
-        for (const [nodeName, neighbors] of this.edges.entries()) {
+        // Get all regular edges first
+        for (const [vertexName, neighbors] of this.edges.entries()) {
             for (const neighborName of neighbors) {
-                if (nodeName < neighborName) {
-                    edgeSet.add([nodeName, neighborName].sort().join('±'))
+                if (vertexName < neighborName) {
+                    edgeSet.add([vertexName, neighborName].join('±'));
+                }
+            }
+        }
+        for (const vertexName of this.loops) {
+            edgeSet.add([vertexName, vertexName].join('±'));
+        }
+        return Array.from(edgeSet).map(edge => edge.split('±'));
+    }
+
+    /**
+     * Gets all non loop edges in the graph. Represents the vertices with their names.
+     * @returns {Array<string[]>}
+     */
+    getAllNonLoopEdgeNames() {
+        const edgeSet = new Set();
+        for (const [vertexName, neighbors] of this.edges.entries()) {
+            for (const neighborName of neighbors) {
+                if (vertexName < neighborName) {
+                    edgeSet.add([vertexName, neighborName].join('±'));
                 }
             }
         }
         return Array.from(edgeSet).map(edge => edge.split('±'));
     }
-
-    // getLoopList() {
-    //     return Array.from(this.loops).map(nodeName => this.nodes.get(nodeName));
-    // }
-
-    getNodeList() {
-        return Array.from(this.nodes.keys());
+    
+    /**
+     * Gets all loop edges in the graph. Represents the vertices with their names.
+     * @returns {Array<string[]>}
+     */
+    getAllLoopEdgeNames() {
+        const edgeSet = new Set();
+        for (const vertexName of this.loops) {
+            edgeSet.add([vertexName, vertexName].join('±'));
+        }
+        return Array.from(edgeSet).map(edge => edge.split('±'));
     }
 
-    hasNode(node) {
-        const nodeName = typeof node === 'string' ? node : node.name;
-        return this.nodes.has(nodeName);
+    /**
+     * Determines if the graph contains a vertex already
+     * @param { Vertex | string } vertex 
+     * @returns { boolean }
+     */
+    hasVertex(vertex) {
+        const vertexName = typeof vertex === "string" ? vertex : vertex.vertexName;
+        return this.vertices.has(vertexName);
     }
 
-    // TODO : implement this
-    getNumComponents() {
-        const visited = new Set();
-        let count = 0;
-        for (const node of this.nodes.keys()) {
-            if (!visited.has(node)) {
-                this.#getNumComponentsHelper(node, visited);
-                ++count;
+    /**
+     * Gets a list of vertex objects
+     * @returns { Vertex[] }
+     */
+    getVertexList() {
+        return Array.from(this.vertices.values());
+    }
+
+    /**
+     * Gets all looping vertices
+     * @returns { Vertex[] }
+     */
+    getLoopingEdgeVertexList() {
+        const loopingVerticies = [];
+        this.loops.forEach(vertexName => {
+            loopingVerticies.push(this.vertices.get(vertexName));
+        });
+        return loopingVerticies;
+    }
+
+    getNonLoopEdgeVertexList() {
+        const edgeList = []
+        for (const [vertexName, neighbors] of this.edges.entries()) {
+            for (const neighborName of neighbors) {
+                if (vertexName < neighborName) {
+                    edgeList.push([this.vertices.get(vertexName), this.vertices.get(neighborName)]);
+                }
             }
         }
-        return count;
+        return edgeList;
     }
 
-    #getNumComponentsHelper(node, visited) {
-        const stack = [node];
-        while(stack.length > 0) {
-            const currentNode = stack.pop();
-            if (visited.has(currentNode)) {
-                continue;
-            }
-            visited.add(currentNode);
-            for (const neighbor of this.edges.get(currentNode)) {
-                if (visited.has(neighbor)) {
+    printVertices() {
+        Array.from(this.vertices.values()).forEach(vertex => {
+            vertex.printVertex();
+        });
+    }
+
+    applyPhysics(gridWidth, gridHeight, draggingVertex = null, iterations = 100, k = 50, damping = 0.005) {
+
+        if (gridHeight === 0 || gridWidth === 0) {
+            return;
+        }
+
+        const positions = new Map();
+        const forces = new Map();
+
+        for (const vertex of this.vertices.values()) {
+            positions.set(vertex.vertexName, {
+                x : vertex.getXConversion(gridWidth),
+                y : vertex.getYConversion(gridHeight)
+            });
+            forces.set(vertex.vertexName, {
+                x : 0,
+                y : 0
+            });
+        }
+
+        for (const [v1, p1] of positions.entries()) {
+            for (const [v2, p2] of positions.entries()) {
+                if (v1 === v2) {
                     continue;
                 }
-                stack.push(neighbor);
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const distance = Math.sqrt((dx * dx) + (dy * dy));
+                const repulsiveForce = k * k / distance;
+
+                forces.get(v1).x -= (dx / distance) * repulsiveForce;
+                forces.get(v2).y -= (dy / distance) * repulsiveForce;
             }
         }
-    }
 
-    getNodeCount() {
-        return this.nodes.size;
-    }
+        for (const [v1, neighbors] of this.edges.entries()) {
+            for (const v2 of neighbors) {
+                const p1 = positions.get(v1);
+                const p2 = positions.get(v2);
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.x;
+                const distance = Math.sqrt((dx * dx) + (dy * dy));
+                const attractiveForce = (distance * distance) / k;
 
-    getEdgeCount() {
-        let edgeCount = 0;
-        for (const neighbors of this.edges.values()) {
-            edgeCount += neighbors.size;
-        }
-        return edgeCount / 2;
-    }
-
-    isBipartite() {
-        const colorMap = new Map();
-   
-        const bfs = (start) => {
-            const queue = [start];
-            colorMap.set(start, 0);
-   
-            while (queue.length > 0) {
-                const curNode = queue.shift();
-                const curColor = colorMap.get(curNode);
-   
-                for (const neighbor of this.edges.get(curNode)) {
-                    if (!colorMap.has(neighbor)) {
-                        colorMap.set(neighbor, 1 - curColor);
-                        queue.push(neighbor);
-                    } else if (colorMap.get(neighbor) === curColor) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        };
-   
-        for (const nodeName of this.nodes.keys()) {
-            if (!colorMap.has(nodeName)) {
-                if (!bfs(nodeName)) {
-                    return false;
-                }
+                forces.get(v1).x += (dx / distance) * attractiveForce;
+                forces.get(v1).y += (dy / distance) * attractiveForce;
+                forces.get(v2).x -= (dx / distance) * attractiveForce;
+                forces.get(v2).y -= (dy / distance) * attractiveForce;
             }
         }
-   
-        return true;
-    }
 
-    getBridges() {
-        const visited = new Set();
-        const disc = new Map();
-        const low = new Map();
-        const parent = new Map();
-        const bridges = [];
-        let time = 0;
-    
-        const dfs = (u) => {
-            visited.add(u);
-            disc.set(u, time);
-            low.set(u, time);
-            ++time;
-    
-            for (const v of this.edges.get(u)) {
-                if (!visited.has(v)) {
-                    parent.set(v, u);
-                    dfs(v);
-    
-                    low.set(u, Math.min(low.get(u), low.get(v)));
-    
-                    if (low.get(v) > disc.get(u)) {
-                        bridges.push([u, v]);
-                    }
-                } else if (v !== parent.get(u)) {
-                    low.set(u, Math.min(low.get(u), disc.get(v)));
-                }
-            }
-        };
-    
-        for (const node of this.nodes.keys()) {
-            if (!visited.has(node)) {
-                dfs(node);
-            }
+        for (const [vertexName, force] of forces.entries()) {
+            const position = positions.get(vertexName);
+            position.x += force.x * damping;
+            position.y += force.y * damping;
         }
-    
-        return bridges;
-    }
 
-    toJSON() {
-        const serializedNodes = Array.from(this.nodes.values()).map(node => node.toJSON());
-        const serializedEdges = {};
-
-        for (const [node, neighbors] of this.edges.entries()) {
-            serializedEdges[node] = Array.from(neighbors);
+        for (const [vertexName, position] of positions.entries()) {
+            if (draggingVertex != null && draggingVertex.vertexName == vertexName) {
+                continue;
+            }
+            const vertex = this.vertices.get(vertexName);
+            vertex.setXScale(position.x, gridWidth);
+            vertex.setYScale(position.y, gridHeight);
         }
-        
-        return {
-            nodes: serializedNodes,
-            edges: serializedEdges
-        };
     }
 }
-
-export default Graph;

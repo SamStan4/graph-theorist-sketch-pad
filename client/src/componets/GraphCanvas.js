@@ -1,125 +1,131 @@
 import React, { useRef, useEffect, useState } from 'react';
 import p5 from 'p5';
-import Graph from '../logic/Graph';
 
-const GraphCanvas = ({graph, updateNodePosition, showBridges}) => {
+const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) => {
   const thickness = 2;
+  const textThickness = 1;
   const vertexDiameter = 30;
-  const vertexRadius = vertexDiameter / 2;
+  const vertexRadius = 15;
   const canvasRef = useRef(null);
-  const [draggingNode, setDraggingNode] = useState(null);
+  const backgroundColor = (255, 255, 255);
+  const vertexColor = (255, 255, 255);
+  const textColor = (0, 0, 0);
+  const loopOffset = 10;
+  const loopDiameter = 25;
 
   useEffect(() => {
+    const vertexList = graph.getVertexList();
+    const loopingEdgeVertexList = graph.getLoopingEdgeVertexList();
+    const nonLoopingEdgeVertexList = graph.getNonLoopEdgeVertexList();
+    let draggedVertex = null;
     const sketch = (p) => {
-      let nodes = Array.from(graph.nodes.values());
-      let draggedNode = null;
-
       p.setup = () => {
         const canvas = p.createCanvas(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
         canvas.parent(canvasRef.current);
         p.textAlign(p.CENTER, p.CENTER);
       };
 
-      const handleResize = () => {
-        if (canvasRef.current) {
-          const newWidth = canvasRef.current.offsetWidth;
-          const newHeight = canvasRef.current.offsetHeight;
-          p.resizeCanvas(newWidth, newHeight);
-          graph.nodes.forEach((node) => {
-            node.x = p.constrain(node.x, vertexRadius, newWidth - vertexRadius);
-            node.y = p.constrain(node.y, vertexRadius, newHeight - vertexRadius);
-          });
-        }
-      };
-
-      window.addEventListener("resize", handleResize);
-
       p.draw = () => {
-        p.background(255);
-        // draw edges
+        p.background(backgroundColor);
         p.stroke(0);
+
+        if (applyPhysics) {
+          graph.applyPhysics(p.width, p.height, draggedVertex);
+        }
+
+        // Drawing the loops
         p.strokeWeight(thickness);
-        graph.nodes.forEach((_, nodeName) => {
-          graph.getNeighbors(nodeName).forEach((neighbor) => {
-            const nodeOne = graph.nodes.get(nodeName);
-            const nodeTwo = graph.nodes.get(neighbor);
-            if (nodeOne && nodeTwo) {
-              p.line(nodeOne.x, nodeOne.y, nodeTwo.x, nodeTwo.y);
-            }
-          })
-        });
+        p.fill(backgroundColor);
+        for (let i = 0; i < loopingEdgeVertexList.length; ++i) {
+          const xPos = (loopingEdgeVertexList[i].getXConversion(sideLength)) + loopOffset;
+          const yPos = (loopingEdgeVertexList[i].getYConversion(sideLength)) - loopOffset;
+          p.ellipse(
+            xPos,
+            yPos,
+            loopDiameter,
+            loopDiameter
+          );
+        }
+
+        // Drawing regular edges
+        p.strokeWeight(thickness);
+        for (let i = 0; i < nonLoopingEdgeVertexList.length; ++i) {
+          const vOneXPos = nonLoopingEdgeVertexList[i][0].getXConversion(p.width);
+          const vOneYPos = nonLoopingEdgeVertexList[i][0].getYConversion(p.height);
+          const vTwoXPos = nonLoopingEdgeVertexList[i][1].getXConversion(p.width);
+          const vTwoYPos = nonLoopingEdgeVertexList[i][1].getYConversion(p.height);
+          p.line(vOneXPos, vOneYPos, vTwoXPos, vTwoYPos);
+        }
 
         if (showBridges) {
-          p.stroke(255, 0, 0);
-          p.strokeWeight(thickness + 1);
-          for (const [nodeOneName, nodeTwoName] of graph.getBridges()) {
-            const nodeOne = graph.nodes.get(nodeOneName);
-            const nodeTwo = graph.nodes.get(nodeTwoName);
-            if (nodeOne && nodeTwo) {
-              p.line(nodeOne.x, nodeOne.y, nodeTwo.x, nodeTwo.y);
-            }
-          }
         }
 
-        p.stroke(0);
-        graph.nodes.forEach((node) => {
+        if (showMST) {
+        }
+
+        // Drawing the vertices
+        for (let i = 0; i < vertexList.length; ++i) {
+          const xPos = vertexList[i].getXConversion(p.width);
+          const yPos = vertexList[i].getYConversion(p.height);
           p.strokeWeight(thickness);
-          p.fill(255);
-          p.ellipse(node.x, node.y, vertexDiameter, vertexDiameter);
-          p.strokeWeight(1);
-          p.fill(0);
-          p.text(node.name, node.x, node.y);
-        });
+          p.fill(vertexColor);
+          p.ellipse(
+            xPos,
+            yPos,
+            vertexDiameter,
+            vertexDiameter
+          );
+          p.strokeWeight(textThickness);
+          p.fill(textColor);
+          p.text(vertexList[i].vertexName, xPos, yPos);
+        }
       }
 
       p.mousePressed = () => {
-        const foundNode = Array.from(graph.nodes.values()).find(
-          (node) => p.dist(p.mouseX, p.mouseY, node.x, node.y) < 15
-        );
-        if (foundNode) {
-          draggedNode = foundNode;
-          setDraggingNode(draggedNode);
+        const foundVertex = vertexList.find((vertex) => {
+          const xPos = vertex.getXConversion(p.width);
+          const yPos = vertex.getYConversion(p.height);
+          return p.dist(p.mouseX, p.mouseY, xPos, yPos) < vertexRadius;
+        });
+        if (foundVertex) {
+          draggedVertex = foundVertex;
         }
       }
 
       p.mouseReleased = () => {
-        if (draggedNode) {
-          setDraggingNode(null);
-          draggedNode = null;
+        if (draggedVertex !== null) {
+          draggedVertex = null;
         }
       }
 
       p.mouseDragged = () => {
-        if (draggedNode != null) {
-          const newX = p.constrain(p.mouseX, vertexRadius, p.width - vertexRadius);
-          const newY = p.constrain(p.mouseY, vertexRadius, p.height - vertexRadius);
-          draggedNode.x = newX;
-          draggedNode.y = newY;
+        if (draggedVertex !== null && p.width !== 0 && p.height !== 0) {
+          const newX = p.constrain(p.mouseX, vertexRadius, sideLength - vertexRadius);
+          const newY = p.constrain(p.mouseY, vertexRadius, sideLength - vertexRadius);
+          draggedVertex.setXScale(newX, p.width);
+          draggedVertex.setYScale(newY, p.height);
         }
+        graph.printVertices();
       }
-
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      }
-    };
-
+    }
     const p5Instance = new p5(sketch);
 
     return () => {
       p5Instance.remove();
     };
-
-  }, [graph, updateNodePosition]);
+  }, [graph, sideLength]);
 
   return (
     <div
       ref={canvasRef}
       style={{
-        width: "100%",
-        height: "100%"
+        width: `${sideLength}px`,
+        height: `${sideLength}px`,
+        border: "1px solid #ddd",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
       }}
     />
   )
-}
+};
 
 export default GraphCanvas;

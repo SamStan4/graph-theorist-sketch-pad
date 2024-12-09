@@ -71,4 +71,10 @@ export default class Vertex {
             yScale : this.yScale
         }
     }
+    /**
+     * prints the vertex to the console;
+     */
+    printVertex() {
+        console.log(`Name: ${this.vertexName} xScale: ${this.xScale} yScale: ${this.yScale}`);
+    }
 }
