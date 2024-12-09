@@ -1,10 +1,9 @@
-import LineSeparator from "./LineSeparator";
-import ComponentStat from "./ComponentStat";
-import VertexEdgeCount from "./VertexEdgeCount";
-import BipartiteStat from "./BipartiteStat";
-import ShowBridges from "./ShowBridges";
+import ComponentStat from "./ComponentStat.js";
+import LineSeparator from "./LineSeparator.js";
+import ShowBridges from "./ShowBridges.js";
+import VertexEdgeCount from "./VertexEdgeCount.js";
 
-const GraphStats = ({ graph, onShowBridgeToggle }) => {
+const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle }) => {
   return (
     <div
       style={{
@@ -13,24 +12,20 @@ const GraphStats = ({ graph, onShowBridgeToggle }) => {
         boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)",
         display: "flex",
         backgroundColor: "#f4f4f4",
-        flexDirection: "column"
+        flexDirection: "column",
       }}
     >
-      <ComponentStat
-        graph={graph}
-      />
-      <LineSeparator/>
-      <VertexEdgeCount
-        graph={graph}
-      />
-      <LineSeparator/>
-      <BipartiteStat
-        graph={graph}
-      />
-      <LineSeparator/>
-      <ShowBridges
-        onToggle={onShowBridgeToggle}
-      />
+        <VertexEdgeCount
+          graph={graph}
+        />
+        <LineSeparator/>
+        <ComponentStat
+          graph={graph}
+        />
+        <LineSeparator/>
+        <ShowBridges
+          onToggle={onShowBridgesToggle}
+        />
     </div>
   );
 }

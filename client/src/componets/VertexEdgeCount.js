@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
 const VertexEdgeCount = ({ graph }) => {
-  const [vertexCount, setVertexCount] = useState(graph.getNodeCount());
+  const [vertexCount, setVertexCount] = useState(graph.getVertexCount());
   const [edgeCount, setEdgeCount] = useState(graph.getEdgeCount());
 
   useEffect(() => {
-    setVertexCount(graph.getNodeCount());
+    setVertexCount(graph.getVertexCount());
     setEdgeCount(graph.getEdgeCount());
   }, [graph])
 

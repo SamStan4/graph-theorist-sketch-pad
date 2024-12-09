@@ -15,7 +15,6 @@ const ToggleSwitch = ({ onToggle }) => {
       <div
         className="thumb"
       >
-
       </div>
     </button>
   );

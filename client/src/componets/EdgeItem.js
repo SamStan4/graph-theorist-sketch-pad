@@ -1,4 +1,4 @@
-const EdgeItem = ({ nodeOne, nodeTwo, onRemove }) => {
+const EdgeItem = ({ vertexOne, vertexTwo, onRemoveEdge }) => {
   return (
     <div
       style={{
@@ -15,9 +15,9 @@ const EdgeItem = ({ nodeOne, nodeTwo, onRemove }) => {
         fontSize: "12px"
       }}
     >
-      <span>{nodeOne} - {nodeTwo}</span>
+      <span>{vertexOne} - {vertexTwo}</span>
       <button
-        onClick={() => onRemove(nodeOne, nodeTwo)}
+        onClick={() => onRemoveEdge(vertexOne, vertexTwo)}
         style={{
           backgroundColor: "red",
           color: "white",
