@@ -3,10 +3,12 @@ import Node from "./Node.js"
 class Graph {
     nodes;
     edges;
+    loops;
 
     constructor() {
         this.nodes = new Map();
         this.edges = new Map();
+        this.loops = new Set();
     }
 
     clone() {
@@ -48,12 +50,12 @@ class Graph {
             throw new Error(`ERROR - [Graph.addEdge] - one or both nodes do not exist`);
         }
 
-        // This is a loop
         if (nodeOneName !== nodeTwoName) {
             this.edges.get(nodeOneName).add(nodeTwoName);
             this.edges.get(nodeTwoName).add(nodeOneName);
         } else {
-            
+            this.loops.add(nodeOneName);
+            console.log("adding a loop");
         }
     }
 
@@ -90,6 +92,10 @@ class Graph {
         }
         return Array.from(edgeSet).map(edge => edge.split('±'));
     }
+
+    // getLoopList() {
+    //     return Array.from(this.loops).map(nodeName => this.nodes.get(nodeName));
+    // }
 
     getNodeList() {
         return Array.from(this.nodes.keys());
