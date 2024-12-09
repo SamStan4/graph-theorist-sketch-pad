@@ -218,7 +218,18 @@ export default class Graph {
         });
     }
 
-    applyPhysics(gridWidth, gridHeight, draggingVertex = null, iterations = 100, k = 50, damping = 0.005) {
+    /**
+     * Applies a single frame of physics to the graph.
+     * @param { number } gridWidth 
+     * @param { number } gridHeight 
+     * @param { number } draggingVertex 
+     * @returns 
+     */
+    applyPhysics(gridWidth, gridHeight, draggingVertex = null) {
+        const k = 50;
+        const damping = 0.01;
+        const wallForceMultiplier = 10000; // fuck them walls
+        const minDistance = Math.min(gridWidth, gridHeight) / 3;
 
         if (gridHeight === 0 || gridWidth === 0) {
             return;
@@ -246,10 +257,18 @@ export default class Graph {
                 const dx = p2.x - p1.x;
                 const dy = p2.y - p1.y;
                 const distance = Math.sqrt((dx * dx) + (dy * dy));
+
+                if (distance < minDistance) {
+                    const adjustmentFactor = (minDistance - distance) / distance;
+                    forces.get(v1).x -= (dx * adjustmentFactor * adjustmentFactor);
+                    forces.get(v1).y -= (dy * adjustmentFactor * adjustmentFactor);
+                    continue;
+                }
+
                 const repulsiveForce = k * k / distance;
 
                 forces.get(v1).x -= (dx / distance) * repulsiveForce;
-                forces.get(v2).y -= (dy / distance) * repulsiveForce;
+                forces.get(v1).y -= (dy / distance) * repulsiveForce;
             }
         }
 
@@ -258,7 +277,7 @@ export default class Graph {
                 const p1 = positions.get(v1);
                 const p2 = positions.get(v2);
                 const dx = p2.x - p1.x;
-                const dy = p2.y - p1.x;
+                const dy = p2.y - p1.y;
                 const distance = Math.sqrt((dx * dx) + (dy * dy));
                 const attractiveForce = (distance * distance) / k;
 
@@ -267,6 +286,29 @@ export default class Graph {
                 forces.get(v2).x -= (dx / distance) * attractiveForce;
                 forces.get(v2).y -= (dy / distance) * attractiveForce;
             }
+        }
+
+        for (const [vertexName, position] of positions.entries()) {
+            const force = forces.get(vertexName);
+
+            let distance = 0;
+            let wallForce = 0;
+
+            distance = Math.max(1, position.x);
+            wallForce = wallForceMultiplier / distance
+            force.x += wallForce;
+
+            distance = Math.max(1, gridWidth - position.x);
+            wallForce = wallForceMultiplier / distance
+            force.x -= wallForce;
+
+            distance = Math.max(1, position.y);
+            wallForce = wallForceMultiplier / distance;
+            force.y += wallForce;
+
+            distance = Math.max(1, gridHeight - position.y);
+            wallForce = wallForceMultiplier / distance;
+            force.y -= wallForce;
         }
 
         for (const [vertexName, force] of forces.entries()) {

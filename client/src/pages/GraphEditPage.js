@@ -7,7 +7,7 @@ const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeRandomGraph());
   const [showBridges, setShowBridges] = useState(false);
   const [showMST, setShowMST] = useState(false);
-  const [applyPhysics, setApplyPhysics] = useState(true);
+  const [applyPhysics, setApplyPhysics] = useState(false);
   const [viewportSize, setViewportSize] = useState(0);
 
   useEffect(() => {

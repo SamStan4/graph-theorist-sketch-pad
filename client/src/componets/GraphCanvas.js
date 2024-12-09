@@ -17,7 +17,11 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
     const vertexList = graph.getVertexList();
     const loopingEdgeVertexList = graph.getLoopingEdgeVertexList();
     const nonLoopingEdgeVertexList = graph.getNonLoopEdgeVertexList();
+    const bridgeEdgeVertexList = null;
+    const MSTEdgeVertexList = null;
+
     let draggedVertex = null;
+
     const sketch = (p) => {
       p.setup = () => {
         const canvas = p.createCanvas(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight);
@@ -105,7 +109,6 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
           draggedVertex.setXScale(newX, p.width);
           draggedVertex.setYScale(newY, p.height);
         }
-        graph.printVertices();
       }
     }
     const p5Instance = new p5(sketch);
