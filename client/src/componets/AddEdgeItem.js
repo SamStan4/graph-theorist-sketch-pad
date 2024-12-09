@@ -1,16 +1,16 @@
 import { useState } from "react";
 
-const AddEdgeItem = ({ onAdd }) => {
-  const [nodeOneName, setNodeOneName] = useState("");
-  const [nodeTwoName, setNodeTwoName] = useState("");
+const AddEdgeItem = ({ onAddEdge }) => {
+  const [vertexOneName, setVertexOneName] = useState("");
+  const [vertexTwoName, setVertexTwoName] = useState("");
 
   const handleAddEdge = () => {
-    const nodeOne = nodeOneName.trim();
-    const nodeTwo = nodeTwoName.trim();
-    if (nodeOne && nodeTwo) {
-      onAdd(nodeOne, nodeTwo);
-      setNodeOneName("");
-      setNodeTwoName("");
+    const vertexOne = vertexOneName.trim();
+    const vertexTwo = vertexTwoName.trim();
+    if (vertexOne && vertexTwo) {
+      onAddEdge(vertexOne, vertexTwo);
+      setVertexOneName("");
+      setVertexTwoName("");
     } else {
       alert("enter a vertex for both fields");
     }
@@ -35,8 +35,8 @@ const AddEdgeItem = ({ onAdd }) => {
     >
       <input
         type="text"
-        value={nodeOneName}
-        onChange={(e) => setNodeOneName(e.target.value)}
+        value={vertexOneName}
+        onChange={(e) => setVertexOneName(e.target.value)}
         placeholder="vertex"
         style={{
           padding: "4px 6px",
@@ -50,8 +50,8 @@ const AddEdgeItem = ({ onAdd }) => {
       />
       <input
         type="text"
-        value={nodeTwoName}
-        onChange={(e) => setNodeTwoName(e.target.value)}
+        value={vertexTwoName}
+        onChange={(e) => setVertexTwoName(e.target.value)}
         placeholder="vertex"
         style={{
           padding: "4px 6px",

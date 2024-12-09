@@ -85,8 +85,8 @@ export default class Graph {
                 this.edges.get(neighbor).delete(vertexName);
             });
             this.loops.delete(vertexName);
-            this.vertices.delete(vertexName);
             this.edges.delete(vertexName);
+            this.vertices.delete(vertexName);
         }
     }
 
@@ -129,6 +129,41 @@ export default class Graph {
     getAllEdgeNames() {
         const edgeSet = new Set();
         // Get all regular edges first
+        for (const [vertexName, neighbors] of this.edges.entries()) {
+            for (const neighborName of neighbors) {
+                if (vertexName < neighborName) {
+                    edgeSet.add([vertexName, neighborName].join('±'));
+                }
+            }
+        }
+        for (const vertexName of this.loops) {
+            edgeSet.add([vertexName, vertexName].join('±'));
+        }
+        return Array.from(edgeSet).map(edge => edge.split('±'));
+    }
+
+    /**
+     * Gets the name of every vertex in the graph.
+     * @returns { string[] }
+     */
+    getAllVertexNames() {
+        return Array.from(this.vertices.keys()); 
+    }
+
+    getAllVertexNamesAndDegree() {
+        const vertexNamesAndDegrees = [];
+        for (const [vertexName, neighbors] of this.edges.entries()) {
+            const degree = neighbors.size + (this.loops.has(vertexName) ? 1 : 0);
+            vertexNamesAndDegrees.push({
+                name : vertexName,
+                deg : degree
+            });
+        }
+        return vertexNamesAndDegrees;
+    }
+
+    getAllEdgeNames() {
+        const edgeSet = new Set();
         for (const [vertexName, neighbors] of this.edges.entries()) {
             for (const neighborName of neighbors) {
                 if (vertexName < neighborName) {

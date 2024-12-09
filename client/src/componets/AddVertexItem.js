@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-const AddNodeItem = ({ onAdd }) => {
-  const [newNodeName, setNewNodeName] = useState("");
+const AddVertexItem = ({ onAddVertex }) => {
+  const [newVertexName, setnewVertexName] = useState("");
 
-  const handleAddNode = () => {
-    const name = newNodeName.trim();
+  const handleAddVertex = () => {
+    const name = newVertexName.trim();
     if (name) {
-      onAdd(name);
-      setNewNodeName("");
+      onAddVertex(name);
+      setnewVertexName("");
     } else {
       alert("enter a vertex name");
     }
@@ -32,8 +32,8 @@ const AddNodeItem = ({ onAdd }) => {
     >
       <input
         type="text"
-        value={newNodeName}
-        onChange={(e) => setNewNodeName(e.target.value)} // Handle user input
+        value={newVertexName}
+        onChange={(e) => setnewVertexName(e.target.value)}
         placeholder="vertex"
         style={{
           padding: "4px 6px",
@@ -46,7 +46,7 @@ const AddNodeItem = ({ onAdd }) => {
         }}
       />
       <button
-        onClick={handleAddNode}
+        onClick={handleAddVertex}
         style={{
           backgroundColor: "green",
           color: "white",
@@ -62,4 +62,4 @@ const AddNodeItem = ({ onAdd }) => {
   );
 }
 
-export default AddNodeItem;
+export default AddVertexItem;

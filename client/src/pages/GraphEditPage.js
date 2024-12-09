@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import makeRandomGraph from './../logic/RandomGraph.js';
 import Navbar from "./../componets/Navbar.js"
 import GraphCanvas from './../componets/GraphCanvas.js';
+import GraphProperties from "./../componets/GraphProperties.js"
+import GraphStats from "./../componets/GraphStats.js"
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeRandomGraph());
@@ -36,7 +38,7 @@ const GraphEditPage = () => {
 
   const deleteVertex = (vertex) => {
     const graphCpy = graph.clone();
-    graphCpy.deleteVertex(vertex);
+    graphCpy.removeVertex(vertex);
     setGraph(graphCpy);
   }
 
@@ -55,7 +57,7 @@ const GraphEditPage = () => {
       return;
     }
     const graphCpy = graph.clone();
-    graphCpy.addVertex(vertexName);
+    graphCpy.addVertexRandomPosition(vertexName);
     setGraph(graphCpy);
   }
 
@@ -89,19 +91,43 @@ const GraphEditPage = () => {
       <div
         style={{
           display:"flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
           flex:1
         }}
       >
-        <GraphCanvas
+        <GraphProperties
           graph={graph}
-          showBridges={showBridges}
-          showMST={showMST}
-          applyPhysics={applyPhysics}
-          sideLength={viewportSize}
+          onRemoveVertex={deleteVertex}
+          onRemoveEdge={deleteEdge}
+          onAddVertex={addVertex}
+          onAddEdge={addEdge}
+        />
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <GraphCanvas
+            graph={graph}
+            showBridges={showBridges}
+            showMST={showMST}
+            applyPhysics={applyPhysics}
+            sideLength={viewportSize}
+          />
+        </div>
+        <GraphStats
+          graph={graph}
+          onShowBridgesToggle={toggleShowBridges}
+          onShowMSTToggle={toggleShowMST}
+          onApplyPhysicsToggle={toggleApplyPhysics}
         />
       </div>
     </div>
-  )
+  );
 }
 
 export default GraphEditPage;

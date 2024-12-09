@@ -1,4 +1,4 @@
-const NodeItem = ({ nodeName, onRemove }) => {
+const VertexItem = ({ vertexName, vertexDegree, onRemoveVertex }) => {
   return (
     <div
     style={{
@@ -15,9 +15,10 @@ const NodeItem = ({ nodeName, onRemove }) => {
       fontSize: "12px"
     }}
     >
-      <span>{nodeName}</span>
+      <span>Name: {vertexName}</span>
+      <span>Deg: {vertexDegree}</span>
       <button
-        onClick={() => onRemove(nodeName)}
+        onClick={() => onRemoveVertex(vertexName)}
         style={{
           backgroundColor: "red",
           color: "white",
@@ -33,4 +34,4 @@ const NodeItem = ({ nodeName, onRemove }) => {
   );
 }
 
-export default NodeItem;
+export default VertexItem;

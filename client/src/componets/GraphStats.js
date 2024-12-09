@@ -1,10 +1,4 @@
-import LineSeparator from "./LineSeparator";
-import ComponentStat from "./ComponentStat";
-import VertexEdgeCount from "./VertexEdgeCount";
-import BipartiteStat from "./BipartiteStat";
-import ShowBridges from "./ShowBridges";
-
-const GraphStats = ({ graph, onShowBridgeToggle }) => {
+const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle }) => {
   return (
     <div
       style={{
@@ -16,21 +10,15 @@ const GraphStats = ({ graph, onShowBridgeToggle }) => {
         flexDirection: "column"
       }}
     >
-      <ComponentStat
-        graph={graph}
-      />
-      <LineSeparator/>
-      <VertexEdgeCount
-        graph={graph}
-      />
-      <LineSeparator/>
-      <BipartiteStat
-        graph={graph}
-      />
-      <LineSeparator/>
-      <ShowBridges
-        onToggle={onShowBridgeToggle}
-      />
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          overflow: "auto",
+        }}
+      >
+
+      </div>
     </div>
   );
 }

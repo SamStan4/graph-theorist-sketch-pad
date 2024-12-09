@@ -1,7 +1,7 @@
-import NodeColumn from "./NodeColumn.js";
 import EdgeColumn from "./EdgeColumn.js";
+import VertexColumn from "./VertexColumn.js";
 
-const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode, onAddEdge }) => {
+const GraphProperties = ({ graph, onRemoveVertex, onRemoveEdge, onAddVertex, onAddEdge }) => {
   return (
     <div
       style={{
@@ -10,36 +10,20 @@ const GraphProperties = ({ graph, onRemoveNode, onRemoveEdge, onAddNode, onAddEd
         boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)",
         display: "flex",
         backgroundColor: "#f4f4f4",
-        flexDirection: "column"
+        flexDirection: "row",
+        justifyContent: "space-between"
       }}
     >
-      {/* <h2
-        style={{
-          textAlign: "center",
-          margin: "0",
-          padding: "10px"
-        }}
-      >
-        Graph Properties
-      </h2> */}
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-          overflow: "auto",
-        }}
-      >
-        <NodeColumn
-          graph={graph}
-          onRemove={onRemoveNode}
-          onAdd={onAddNode}
-        />
-        <EdgeColumn
-          graph={graph}
-          onRemove={onRemoveEdge}
-          onAdd={onAddEdge}
-        />
-      </div>
+      <VertexColumn
+        graph={graph}
+        onRemoveVertex={onRemoveVertex}
+        onAddVertex={onAddVertex}
+      />
+      <EdgeColumn
+        graph={graph}
+        onRemoveEdge={onRemoveEdge}
+        onAddEdge={onAddEdge}
+      />
     </div>
   );
 }
