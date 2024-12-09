@@ -19,7 +19,7 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
     const loopingEdgeVertexList = graph.getLoopingEdgeVertexList();
     const nonLoopingEdgeVertexList = graph.getNonLoopEdgeVertexList();
     const bridgeEdgeVertexList = graph.getBridgeVertexList();
-    const MSTEdgeVertexList = null;
+    const MSTEdgeVertexList = graph.getSpanningTreeEdges();
 
     let draggedVertex = null;
 
@@ -41,25 +41,37 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
         // Drawing the loops
         p.strokeWeight(thickness);
         p.fill(backgroundColor);
-        for (let i = 0; i < loopingEdgeVertexList.length; ++i) {
-          const xPos = (loopingEdgeVertexList[i].getXConversion(sideLength)) + loopOffset;
-          const yPos = (loopingEdgeVertexList[i].getYConversion(sideLength)) - loopOffset;
-          p.ellipse(
-            xPos,
-            yPos,
-            loopDiameter,
-            loopDiameter
-          );
+        if (!showMST) {
+          for (let i = 0; i < loopingEdgeVertexList.length; ++i) {
+            const xPos = (loopingEdgeVertexList[i].getXConversion(sideLength)) + loopOffset;
+            const yPos = (loopingEdgeVertexList[i].getYConversion(sideLength)) - loopOffset;
+            p.ellipse(
+              xPos,
+              yPos,
+              loopDiameter,
+              loopDiameter
+            );
+          }
         }
 
         // Drawing regular edges
         p.strokeWeight(thickness);
-        for (let i = 0; i < nonLoopingEdgeVertexList.length; ++i) {
-          const vOneXPos = nonLoopingEdgeVertexList[i][0].getXConversion(p.width);
-          const vOneYPos = nonLoopingEdgeVertexList[i][0].getYConversion(p.height);
-          const vTwoXPos = nonLoopingEdgeVertexList[i][1].getXConversion(p.width);
-          const vTwoYPos = nonLoopingEdgeVertexList[i][1].getYConversion(p.height);
-          p.line(vOneXPos, vOneYPos, vTwoXPos, vTwoYPos);
+        if (showMST) {
+          for (let i = 0; i < MSTEdgeVertexList.length; ++i) {
+            const vOneXPos = MSTEdgeVertexList[i][0].getXConversion(p.width);
+            const vOneYPos = MSTEdgeVertexList[i][0].getYConversion(p.height);
+            const vTwoXPos = MSTEdgeVertexList[i][1].getXConversion(p.width);
+            const vTwoYPos = MSTEdgeVertexList[i][1].getYConversion(p.height);
+            p.line(vOneXPos, vOneYPos, vTwoXPos, vTwoYPos);
+          }
+        } else {
+          for (let i = 0; i < nonLoopingEdgeVertexList.length; ++i) {
+            const vOneXPos = nonLoopingEdgeVertexList[i][0].getXConversion(p.width);
+            const vOneYPos = nonLoopingEdgeVertexList[i][0].getYConversion(p.height);
+            const vTwoXPos = nonLoopingEdgeVertexList[i][1].getXConversion(p.width);
+            const vTwoYPos = nonLoopingEdgeVertexList[i][1].getYConversion(p.height);
+            p.line(vOneXPos, vOneYPos, vTwoXPos, vTwoYPos);
+          }
         }
 
         if (showBridges) {

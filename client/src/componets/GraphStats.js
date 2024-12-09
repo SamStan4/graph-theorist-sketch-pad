@@ -36,6 +36,7 @@ const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysic
         <LineSeparator/>
         <ShowMST
           onToggle={onShowMSTToggle}
+          graph={graph}
         />
         <LineSeparator/>
         <ApplyPhysics

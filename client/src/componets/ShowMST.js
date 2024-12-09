@@ -1,6 +1,6 @@
-import ToggleSwitch from "./SmallComponents/ToggleSwitch.js"
+import AdvancedToggleSwitch from "./SmallComponents/AdvancedToggleSwitch.js";
 
-const ShowMST = ({ onToggle }) => {
+const ShowMST = ({ onToggle, graph }) => {
   return (
     <div
       style={{
@@ -15,9 +15,12 @@ const ShowMST = ({ onToggle }) => {
           margin: "0px"
         }}
       >
-        Show MST?
+        Show Spanning Tree?
       </p>
-      <ToggleSwitch onToggle={onToggle}/>
+      <AdvancedToggleSwitch
+        onToggle={onToggle}
+        graph={graph}
+      />
     </div>
   )
 }

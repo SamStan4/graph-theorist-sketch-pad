@@ -368,6 +368,31 @@ export default class Graph {
         return true;
     }
 
+    getSpanningTreeEdges() {
+        const spanningTreeEdges = [];
+        const visited = new Set();
+
+        if (this.vertices.size === 0) {
+            return [];
+        }
+    
+        const dfs = (currentVertex) => {
+            visited.add(currentVertex);
+    
+            for (const neighbor of this.edges.get(currentVertex)) {
+                if (!visited.has(neighbor)) {
+                    spanningTreeEdges.push([this.vertices.get(currentVertex), this.vertices.get(neighbor)]);
+                    dfs(neighbor);
+                }
+            }
+        };
+    
+        const startVertex = this.vertices.keys().next().value;
+        dfs(startVertex, null);
+    
+        return spanningTreeEdges;
+    }
+
     /**
      * Applies a single frame of physics to the graph.
      * @param { number } gridWidth 
