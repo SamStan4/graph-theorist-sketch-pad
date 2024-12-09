@@ -23,7 +23,7 @@ export default class Graph {
     constructor() {
         this.vertices = new Map();
         this.edges = new Map();
-        this.loops = new Set;
+        this.loops = new Set();
     }
 
     /**
@@ -66,7 +66,7 @@ export default class Graph {
         if (!this.vertices.has(nodeOneName) || !this.vertices.has(nodeTwoName)) {
             throw new Error(`one or both vertices does not exist`);
         }
-        if (nodeOneName == nodeTwoName) {
+        if (nodeOneName === nodeTwoName) {
             this.loops.add(nodeOneName);
         } else {
             this.edges.get(nodeOneName).add(nodeTwoName);
@@ -101,7 +101,7 @@ export default class Graph {
         if (!this.vertices.has(nodeOneName) || !this.vertices.has(nodeTwoName)) {
             throw new Error(`one or both vertices does not exist`);
         }
-        if (nodeOneName == nodeTwoName) {
+        if (nodeOneName === nodeTwoName) {
             this.loops.delete(nodeOneName);
         } else {
             this.edges.get(nodeOneName).delete(nodeTwoName);
@@ -219,6 +219,47 @@ export default class Graph {
     }
 
     /**
+     * Gets all bridges in the graph using tarjan's alg
+     * @returns { Vertex[] }
+     */
+    getBridgeVertexList() {
+        const visited = new Set();
+        const discoverTime = new Map();
+        const lowTime = new Map();
+        const parent = new Map();
+        const bridges = [];
+        let time = 0;
+    
+        const dfs = (curVertex) => {
+            visited.add(curVertex);
+            discoverTime.set(curVertex, time);
+            lowTime.set(curVertex, time);
+            ++time;
+    
+            for (const nextVertex of this.edges.get(curVertex)) {
+                if (!visited.has(nextVertex)) {
+                    parent.set(nextVertex, curVertex);
+                    dfs(nextVertex);
+                    lowTime.set(curVertex, Math.min(lowTime.get(curVertex), lowTime.get(nextVertex)));
+                        if (lowTime.get(nextVertex) > discoverTime.get(curVertex)) {
+                        bridges.push([this.vertices.get(curVertex), this.vertices.get(nextVertex)]);
+                    }
+                } else if (nextVertex !== parent.get(curVertex)) {
+                    lowTime.set(curVertex, Math.min(lowTime.get(curVertex), discoverTime.get(nextVertex)));
+                }
+            }
+        }
+
+        for (const vertexName of this.vertices.keys()) {
+            if (!visited.has(vertexName)) {
+                dfs(vertexName);
+            }
+        }
+    
+        return bridges;
+    }
+
+    /**
      * Applies a single frame of physics to the graph.
      * @param { number } gridWidth 
      * @param { number } gridHeight 
@@ -318,7 +359,7 @@ export default class Graph {
         }
 
         for (const [vertexName, position] of positions.entries()) {
-            if (draggingVertex != null && draggingVertex.vertexName == vertexName) {
+            if (draggingVertex !== null && draggingVertex.vertexName === vertexName) {
                 continue;
             }
             const vertex = this.vertices.get(vertexName);

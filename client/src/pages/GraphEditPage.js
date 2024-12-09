@@ -5,9 +5,9 @@ import GraphCanvas from './../componets/GraphCanvas.js';
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeRandomGraph());
-  const [showBridges, setShowBridges] = useState(false);
+  const [showBridges, setShowBridges] = useState(true);
   const [showMST, setShowMST] = useState(false);
-  const [applyPhysics, setApplyPhysics] = useState(false);
+  const [applyPhysics, setApplyPhysics] = useState(true);
   const [viewportSize, setViewportSize] = useState(0);
 
   useEffect(() => {

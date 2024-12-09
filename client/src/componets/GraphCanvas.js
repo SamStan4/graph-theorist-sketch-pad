@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import p5 from 'p5';
 
 const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) => {
@@ -10,6 +10,7 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
   const backgroundColor = (255, 255, 255);
   const vertexColor = (255, 255, 255);
   const textColor = (0, 0, 0);
+  const bridgeThickness = 2;
   const loopOffset = 10;
   const loopDiameter = 25;
 
@@ -17,7 +18,7 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
     const vertexList = graph.getVertexList();
     const loopingEdgeVertexList = graph.getLoopingEdgeVertexList();
     const nonLoopingEdgeVertexList = graph.getNonLoopEdgeVertexList();
-    const bridgeEdgeVertexList = null;
+    const bridgeEdgeVertexList = graph.getBridgeVertexList();
     const MSTEdgeVertexList = null;
 
     let draggedVertex = null;
@@ -62,6 +63,16 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
         }
 
         if (showBridges) {
+          p.strokeWeight(bridgeThickness);
+          p.stroke(255, 0, 0);
+          for (let i = 0; i < bridgeEdgeVertexList.length; ++i) {
+            const vOneXPos = bridgeEdgeVertexList[i][0].getXConversion(p.width);
+            const vOneYPos = bridgeEdgeVertexList[i][0].getYConversion(p.height);
+            const vTwoXPos = bridgeEdgeVertexList[i][1].getXConversion(p.width);
+            const vTwoYPos = bridgeEdgeVertexList[i][1].getYConversion(p.height);
+            p.line(vOneXPos, vOneYPos, vTwoXPos, vTwoYPos);
+          }
+          p.stroke(0);
         }
 
         if (showMST) {
@@ -104,8 +115,8 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
 
       p.mouseDragged = () => {
         if (draggedVertex !== null && p.width !== 0 && p.height !== 0) {
-          const newX = p.constrain(p.mouseX, vertexRadius, sideLength - vertexRadius);
-          const newY = p.constrain(p.mouseY, vertexRadius, sideLength - vertexRadius);
+          const newX = p.constrain(p.mouseX, vertexRadius, p.width - vertexRadius);
+          const newY = p.constrain(p.mouseY, vertexRadius, p.height - vertexRadius);
           draggedVertex.setXScale(newX, p.width);
           draggedVertex.setYScale(newY, p.height);
         }
@@ -116,7 +127,7 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
     return () => {
       p5Instance.remove();
     };
-  }, [graph, sideLength]);
+  }, [graph]);
 
   return (
     <div
