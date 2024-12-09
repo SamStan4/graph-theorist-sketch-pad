@@ -48,8 +48,13 @@ class Graph {
             throw new Error(`ERROR - [Graph.addEdge] - one or both nodes do not exist`);
         }
 
-        this.edges.get(nodeOneName).add(nodeTwoName);
-        this.edges.get(nodeTwoName).add(nodeOneName);
+        // This is a loop
+        if (nodeOneName !== nodeTwoName) {
+            this.edges.get(nodeOneName).add(nodeTwoName);
+            this.edges.get(nodeTwoName).add(nodeOneName);
+        } else {
+            
+        }
     }
 
     removeEdge(nodeOne, nodeTwo) {
