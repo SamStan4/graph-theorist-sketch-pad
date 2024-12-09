@@ -15,7 +15,7 @@ const BipartiteStat = ({ graph }) => {
           margin: "3px"
         }}
       >
-        Is biparitie: {isBipartite ? "true" : "false"}
+        Is biparitie: {isBipartite ? "yes" : "no"}
       </p>
     </div>
   );

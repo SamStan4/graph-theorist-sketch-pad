@@ -9,7 +9,7 @@ const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeRandomGraph());
   const [showBridges, setShowBridges] = useState(false);
   const [showMST, setShowMST] = useState(false);
-  const [applyPhysics, setApplyPhysics] = useState(true);
+  const [applyPhysics, setApplyPhysics] = useState(false);
   const [viewportSize, setViewportSize] = useState(0);
 
   useEffect(() => {
@@ -28,12 +28,12 @@ const GraphEditPage = () => {
     setShowBridges(state);
   }
 
-  const toggleShowMST = () => {
-    setShowMST(!showMST);
+  const toggleShowMST = (state) => {
+    setShowMST(state);
   }
 
-  const toggleApplyPhysics = () => {
-    setApplyPhysics(!applyPhysics);
+  const toggleApplyPhysics = (state) => {
+    setApplyPhysics(state);
   }
 
   const deleteVertex = (vertex) => {

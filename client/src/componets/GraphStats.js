@@ -1,7 +1,10 @@
+import ApplyPhysics from "./ApplyPhysics.js";
 import ComponentStat from "./ComponentStat.js";
 import LineSeparator from "./LineSeparator.js";
 import ShowBridges from "./ShowBridges.js";
 import VertexEdgeCount from "./VertexEdgeCount.js";
+import ShowMST from "./ShowMST.js"
+import BipartiteStat from "./BipartiteStat.js";
 
 const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle }) => {
   return (
@@ -23,8 +26,20 @@ const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysic
           graph={graph}
         />
         <LineSeparator/>
+        <BipartiteStat
+          graph={graph}
+        />
+        <LineSeparator/>
         <ShowBridges
           onToggle={onShowBridgesToggle}
+        />
+        <LineSeparator/>
+        <ShowMST
+          onToggle={onShowMSTToggle}
+        />
+        <LineSeparator/>
+        <ApplyPhysics
+          onToggle={onApplyPhysicsToggle}
         />
     </div>
   );

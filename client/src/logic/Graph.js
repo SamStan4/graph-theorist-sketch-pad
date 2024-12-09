@@ -332,6 +332,42 @@ export default class Graph {
         return edgeCount;
     }
 
+    isBipartite() {
+        if (this.loops.size > 0) {
+            return false;
+        }
+        const color = new Map();
+        const visited = new Set();
+
+        const bfs = (start) => {
+            const queue = [start];
+            color.set(start, 0);
+            while (queue.length > 0) {
+                const current = queue.shift();
+                visited.add(current);
+                for (const neighbor of this.edges.get(current)) {
+                    if (!color.has(neighbor)) {
+                        color.set(neighbor, 1 - color.get(current));
+                        queue.push(neighbor);
+                    } else if (color.get(neighbor) === color.get(current)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
+        for (const vertex of this.vertices.keys()) {
+            if (!visited.has(vertex)) {
+                if (!bfs(vertex)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Applies a single frame of physics to the graph.
      * @param { number } gridWidth 
