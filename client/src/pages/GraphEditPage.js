@@ -7,7 +7,7 @@ import GraphStats from "./../componets/GraphStats.js"
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(makeRandomGraph());
-  const [showBridges, setShowBridges] = useState(true);
+  const [showBridges, setShowBridges] = useState(false);
   const [showMST, setShowMST] = useState(false);
   const [applyPhysics, setApplyPhysics] = useState(true);
   const [viewportSize, setViewportSize] = useState(0);
@@ -24,8 +24,8 @@ const GraphEditPage = () => {
     }
   }, []);
 
-  const toggleShowBridges = () => {
-    setShowBridges(!showBridges);
+  const toggleShowBridges = (state) => {
+    setShowBridges(state);
   }
 
   const toggleShowMST = () => {

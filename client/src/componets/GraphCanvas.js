@@ -127,7 +127,7 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
     return () => {
       p5Instance.remove();
     };
-  }, [graph, sideLength]);
+  }, [graph, sideLength, showBridges, showMST, applyPhysics]);
 
   return (
     <div

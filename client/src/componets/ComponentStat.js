@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 
 const ComponentStat = ({ graph }) => {
-  const [numComponents, setNumComponents] = useState(graph.getNumComponents());
+  const [numComponents, setNumComponents] = useState(graph.getNumberOfComponents());
 
   useEffect(() => {
-    setNumComponents(graph.getNumComponents());
-  }, [graph]); // will this 
+    setNumComponents(graph.getNumberOfComponents());
+  }, [graph]);
 
   return (
-    <div
-    >
+    <div>
       <p
         style={{
           textAlign: "center",

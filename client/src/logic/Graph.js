@@ -295,6 +295,44 @@ export default class Graph {
     }
 
     /**
+     * Gets the number of components in the graph.
+     * @returns { number }
+     */
+    getNumberOfComponents() {
+        const visited = new Set();
+        let count = 0;
+        const dfs = (curVertex) => {
+            visited.add(curVertex);
+            for (const neighbor of this.edges.get(curVertex)) {
+                if (!visited.has(neighbor)) {
+                    dfs(neighbor);
+                }
+            }
+        }
+        for (const vertexName of this.vertices.keys()) {
+            if (!visited.has(vertexName)) {
+                dfs(vertexName);
+                ++count;
+            }
+        }
+        return count;
+    }
+
+    getVertexCount() {
+        return this.vertices.size;
+    }
+
+    getEdgeCount() {
+        let edgeCount = 0;
+        for (const neighbors of this.edges.values()) {
+            edgeCount += neighbors.size;
+        }
+        edgeCount /= 2;
+        edgeCount += this.loops.size;
+        return edgeCount;
+    }
+
+    /**
      * Applies a single frame of physics to the graph.
      * @param { number } gridWidth 
      * @param { number } gridHeight 
