@@ -55,6 +55,19 @@ export default class Graph {
         this.edges.set(name, new Set());
     }
 
+        /**
+     * Adds a node to the graph in a specific position.
+     * @param { string } name 
+     */
+    addVertexExactScale(name, newXScale, newYScale) {
+        if (this.vertices.has(name)) {
+            throw new Error(`graph already has vertex with name ${name}`);
+        }
+        const newVertex = new Vertex(name, newXScale, newYScale);
+        this.vertices.set(name, newVertex);
+        this.edges.set(name, new Set());
+    }
+
     /**
      * Adds an edge to the graph.
      * @param { Vertex | string } vertexOne 

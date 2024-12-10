@@ -5,8 +5,9 @@ import ShowBridges from "./ShowBridges.js";
 import VertexEdgeCount from "./VertexEdgeCount.js";
 import ShowMST from "./ShowMST.js"
 import BipartiteStat from "./BipartiteStat.js";
+import QuickDrawGraphs from "./DrawGraphs.js";
 
-const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle }) => {
+const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle, onShowQuickDrawToggle }) => {
   return (
     <div
       style={{
@@ -42,6 +43,11 @@ const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysic
         <ApplyPhysics
           onToggle={onApplyPhysicsToggle}
         />
+        <LineSeparator/>
+        <QuickDrawGraphs
+          onClickDraw={onShowQuickDrawToggle}
+        />
+        <LineSeparator/>
     </div>
   );
 }

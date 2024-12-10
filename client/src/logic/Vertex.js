@@ -20,7 +20,7 @@ export default class Vertex {
             throw new TypeError("Scale values must be numbers.");
         }
         if (newXScale > 100 || newXScale < 0 || newYScale > 100 || newYScale < 0) {
-            throw new Error("Scale values must be between 0 and 100.");
+            throw new Error(`Scale values must be between 0 and 100. was given ${newXScale} ${newYScale}`);
         }
         this.vertexName = newVertexName;
         this.xScale = newXScale / 100;
@@ -50,7 +50,13 @@ export default class Vertex {
      * @param { number } windowWidth 
      */
     setXScale(windowXPosition, windowWidth) {
-        this.xScale = windowXPosition / windowWidth;
+        let newXScale = windowXPosition / windowWidth;
+        if (newXScale <= 0) {
+            newXScale = 0.0001;
+        } else if (newXScale >= 1) {
+            newXScale = 0.9999;
+        }
+        this.xScale = newXScale;
     }
     /**
      * Sets the y scale
@@ -58,7 +64,13 @@ export default class Vertex {
      * @param { number } windowHeight 
      */
     setYScale(windowYPosition, windowHeight) {
-        this.yScale = windowYPosition / windowHeight;
+        let newYScale = windowYPosition / windowHeight;
+        if (newYScale <= 0) {
+            newYScale = 0.0001;
+        } else if (newYScale >= 1) {
+            newYScale = 0.9999;
+        }
+        this.yScale = newYScale;
     }
     /**
      * converts the vertex to a json

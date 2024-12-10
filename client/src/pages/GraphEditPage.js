@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import makeRandomGraph from './../logic/RandomGraph.js';
+import PrettyGraphFactory from '../logic/PrettyGraphFactory.js';
 import Navbar from "./../componets/Navbar.js"
 import GraphCanvas from './../componets/GraphCanvas.js';
 import GraphProperties from "./../componets/GraphProperties.js"
-import GraphStats from "./../componets/GraphStats.js"
+import GraphStats from "./../componets/GraphStats.js";
+import GraphQuickDrawModal from "./../componets/GraphQuickDrawModal.js";
 
 const GraphEditPage = () => {
-  const [graph, setGraph] = useState(makeRandomGraph());
+  const [graph, setGraph] = useState(PrettyGraphFactory.makeEmptyGraph());
   const [showBridges, setShowBridges] = useState(false);
   const [showMST, setShowMST] = useState(false);
   const [applyPhysics, setApplyPhysics] = useState(false);
+  const [showGraphQuickDrawModal, setShowGraphQuickDrawModal] = useState(false);
   const [viewportSize, setViewportSize] = useState(0);
 
   useEffect(() => {
@@ -34,6 +37,22 @@ const GraphEditPage = () => {
 
   const toggleApplyPhysics = (state) => {
     setApplyPhysics(state);
+  }
+
+  const toggleShowGraphQuickDrawModal = (state) => {
+    setShowGraphQuickDrawModal(state);
+  }
+
+  const drawCycleGraph = (numVertices) => {
+    setGraph(PrettyGraphFactory.makeCycleGraph(numVertices));
+  }
+
+  const drawCompleteGraph = (numVertices) => {
+    setGraph(PrettyGraphFactory.makeCompleteGraph(numVertices));
+  }
+
+  const drawHeartGraph = (numVertices) => {
+    setGraph(PrettyGraphFactory.makeHeartGraph(numVertices));
   }
 
   const deleteVertex = (vertex) => {
@@ -87,6 +106,15 @@ const GraphEditPage = () => {
       }}
     >
       <Navbar/>
+      {/* for drawing stupid graphs */}
+      {showGraphQuickDrawModal && (
+        <GraphQuickDrawModal
+          onCloseModal={toggleShowGraphQuickDrawModal}
+          onDrawCycle={drawCycleGraph}
+          onDrawComplete={drawCompleteGraph}
+          onDrawHeart={drawHeartGraph}
+        />
+      )}
       {/* MAIN CONTENT */}
       <div
         style={{
@@ -124,6 +152,7 @@ const GraphEditPage = () => {
           onShowBridgesToggle={toggleShowBridges}
           onShowMSTToggle={toggleShowMST}
           onApplyPhysicsToggle={toggleApplyPhysics}
+          onShowQuickDrawToggle={toggleShowGraphQuickDrawModal}
         />
       </div>
     </div>
