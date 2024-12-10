@@ -33,6 +33,7 @@ export default class Vertex {
      * @returns convertex x into pixles
      */
     getXConversion(windowWidth) {
+        console.log(this.xScale);
         return this.xScale * windowWidth;
     }
     /**
@@ -49,13 +50,17 @@ export default class Vertex {
      * @param { number } windowXPosition 
      * @param { number } windowWidth 
      */
-    setXScale(windowXPosition, windowWidth) {
+    setXScale(windowXPosition, windowWidth) { // need this to constrain the scale 0 < scalse < 1
         let newXScale = windowXPosition / windowWidth;
+        const MIN_SCALE = 0.0001;
+        const MAX_SCALE = 0.9999;
+    
         if (newXScale <= 0) {
-            newXScale = 0.0001;
+          newXScale = MIN_SCALE;
         } else if (newXScale >= 1) {
-            newXScale = 0.9999;
+          newXScale = MAX_SCALE;
         }
+    
         this.xScale = newXScale;
     }
     /**
@@ -65,11 +70,15 @@ export default class Vertex {
      */
     setYScale(windowYPosition, windowHeight) {
         let newYScale = windowYPosition / windowHeight;
+        const MIN_SCALE = 0.0001;
+        const MAX_SCALE = 0.9999;
+    
         if (newYScale <= 0) {
-            newYScale = 0.0001;
+          newYScale = MIN_SCALE;
         } else if (newYScale >= 1) {
-            newYScale = 0.9999;
+          newYScale = MAX_SCALE;
         }
+    
         this.yScale = newYScale;
     }
     /**

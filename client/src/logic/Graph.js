@@ -510,6 +510,9 @@ export default class Graph {
                 continue;
             }
             const vertex = this.vertices.get(vertexName);
+            if (Number.isNaN(position.x) || Number.isNaN(position.y)) {
+                continue;
+            }
             vertex.setXScale(position.x, gridWidth);
             vertex.setYScale(position.y, gridHeight);
         }
