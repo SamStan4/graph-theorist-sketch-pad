@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import makeRandomGraph from './../logic/RandomGraph.js';
 import PrettyGraphFactory from '../logic/PrettyGraphFactory.js';
 import Navbar from "./../componets/Navbar.js"
 import GraphCanvas from './../componets/GraphCanvas.js';
 import GraphProperties from "./../componets/GraphProperties.js"
 import GraphStats from "./../componets/GraphStats.js";
 import GraphQuickDrawModal from "./../componets/GraphQuickDrawModal.js";
+import ShowAdjacencyMatrix from '../componets/ShowAdjacencyMatrixModal.js';
 
 const GraphEditPage = () => {
   const [graph, setGraph] = useState(PrettyGraphFactory.makeEmptyGraph());
@@ -13,6 +13,7 @@ const GraphEditPage = () => {
   const [showMST, setShowMST] = useState(false);
   const [applyPhysics, setApplyPhysics] = useState(false);
   const [showGraphQuickDrawModal, setShowGraphQuickDrawModal] = useState(false);
+  const [showAdjacencyMatrixModal, setShowAdjacencyMatrixModal] = useState(false);
   const [viewportSize, setViewportSize] = useState(0);
 
   useEffect(() => {
@@ -41,6 +42,10 @@ const GraphEditPage = () => {
 
   const toggleShowGraphQuickDrawModal = (state) => {
     setShowGraphQuickDrawModal(state);
+  }
+
+  const toggleShowAdjacencyMatrixModal = (state) => {
+    setShowAdjacencyMatrixModal(state);
   }
 
   const drawCycleGraph = (numVertices) => {
@@ -115,6 +120,12 @@ const GraphEditPage = () => {
           onDrawHeart={drawHeartGraph}
         />
       )}
+      {showAdjacencyMatrixModal && (
+        <ShowAdjacencyMatrix
+          onCloseModal={toggleShowAdjacencyMatrixModal}
+          graph={graph}
+        />
+      )}
       {/* MAIN CONTENT */}
       <div
         style={{
@@ -153,6 +164,7 @@ const GraphEditPage = () => {
           onShowMSTToggle={toggleShowMST}
           onApplyPhysicsToggle={toggleApplyPhysics}
           onShowQuickDrawToggle={toggleShowGraphQuickDrawModal}
+          onViewAdjacencyMatrix={toggleShowAdjacencyMatrixModal}
         />
       </div>
     </div>

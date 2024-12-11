@@ -228,6 +228,19 @@ export default class Graph {
         return this.vertices.has(vertexName);
     }
 
+    hasEdge(vertexOne, vertexTwo) {
+        const vertexOneName = typeof vertexOne === "string" ? vertexOne : vertexOne.vertexName;
+        const vertexTwoName = typeof vertexTwo === "string" ? vertexTwo : vertexTwo.vertexName;
+        if (!this.vertices.has(vertexOneName) || !this.vertices.has(vertexTwoName)) {
+            return false;
+        }
+        if (vertexOneName == vertexTwoName) {
+            return this.loops.has(vertexOneName);
+        } else {
+            return this.edges.get(vertexOneName).has(vertexTwoName);
+        }
+    }
+
     /**
      * Gets a list of vertex objects
      * @returns { Vertex[] }
@@ -404,6 +417,29 @@ export default class Graph {
         dfs(startVertex, null);
     
         return spanningTreeEdges;
+    }
+
+    getAdjacencyMatrix() {
+        const n = this.vertices.size + 1;
+        const matrix = [];
+        for (let i = 0; i < n; ++i) {
+            const row = [];
+            for (let j = 0; j < n; ++j) {
+                row.push("");
+            }
+            matrix.push(row);
+        }
+        const vertexNames = this.getAllVertexNames().sort();
+        for (let i = 0; i < vertexNames.length; ++i) {
+            matrix[i + 1][0] = vertexNames[i];
+            matrix[0][i + 1] = vertexNames[i];
+        }
+        for (let i = 0; i < vertexNames.length; ++i) {
+            for (let j = 0; j < vertexNames.length; ++j) {
+                matrix[i + 1][j + 1] = this.hasEdge(vertexNames[i], vertexNames[j]) ? "1" : "0";
+            }
+        }
+        return matrix;
     }
 
     /**

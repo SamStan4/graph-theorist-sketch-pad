@@ -33,7 +33,6 @@ export default class Vertex {
      * @returns convertex x into pixles
      */
     getXConversion(windowWidth) {
-        console.log(this.xScale);
         return this.xScale * windowWidth;
     }
     /**

@@ -6,8 +6,9 @@ import VertexEdgeCount from "./VertexEdgeCount.js";
 import ShowMST from "./ShowMST.js"
 import BipartiteStat from "./BipartiteStat.js";
 import QuickDrawGraphs from "./DrawGraphs.js";
+import ViewAdjacenceMatrix from "./ViewAdjacencyMatrix.js";
 
-const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle, onShowQuickDrawToggle }) => {
+const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle, onShowQuickDrawToggle, onViewAdjacencyMatrix }) => {
   return (
     <div
       style={{
@@ -48,6 +49,9 @@ const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysic
           onClickDraw={onShowQuickDrawToggle}
         />
         <LineSeparator/>
+        <ViewAdjacenceMatrix
+          onClickView={onViewAdjacencyMatrix}
+        />
     </div>
   );
 }
