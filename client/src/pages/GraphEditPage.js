@@ -60,6 +60,10 @@ const GraphEditPage = () => {
     setGraph(PrettyGraphFactory.makeHeartGraph(numVertices));
   }
 
+  const drawBipartiteGraph = (numVertices) => {
+    setGraph(PrettyGraphFactory.makeBipartiteGraph(numVertices));
+  }
+
   const deleteVertex = (vertex) => {
     const graphCpy = graph.clone();
     graphCpy.removeVertex(vertex);
@@ -118,6 +122,7 @@ const GraphEditPage = () => {
           onDrawCycle={drawCycleGraph}
           onDrawComplete={drawCompleteGraph}
           onDrawHeart={drawHeartGraph}
+          onDrawBipartite={drawBipartiteGraph}
         />
       )}
       {showAdjacencyMatrixModal && (

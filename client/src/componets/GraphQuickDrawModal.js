@@ -1,8 +1,9 @@
 import DrawCycleGraph from "./DrawCycleGraph.js";
 import DrawCompleteGraph from "./DrawCompleteGraph.js"
 import DrawHeartGraph from "./DrawHeartGraph.js";
+import DrawBipartiteGraph from "./DrawBipartiteGraph.js";
 
-const GraphQuickDrawModal = ({ onCloseModal, onDrawCycle, onDrawComplete, onDrawHeart }) => {
+const GraphQuickDrawModal = ({ onCloseModal, onDrawCycle, onDrawComplete, onDrawHeart, onDrawBipartite }) => {
   return (
     <div
       style={{
@@ -86,6 +87,12 @@ const GraphQuickDrawModal = ({ onCloseModal, onDrawCycle, onDrawComplete, onDraw
             onDrawClick={(num) => {
               onCloseModal(false);
               onDrawHeart(num);
+            }}
+          />
+          <DrawBipartiteGraph
+            onDrawClick={(num) => {
+              onCloseModal(false);
+              onDrawBipartite(num);
             }}
           />
         </div>

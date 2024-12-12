@@ -101,7 +101,30 @@ class PrettyGraphFactory {
         }
 
         return graph;
+  }
+  
+  static makeBipartiteGraph(numberOfVertices) {
+    const graph = new Graph();
+    const xStart = 100 / (numberOfVertices / 2 + 1);
+    const yStart = 45;
+    for (let i = 0; i < numberOfVertices; ++i) {
+      const vertexName = i.toString();
+      const x = i % 2 ? xStart + ((i - 1) * xStart / 2) : xStart + (i * xStart / 2);
+      console.log(x);
+      const y = i % 2 ? yStart + 10 : yStart;
+      graph.addVertexExactScale(vertexName, x, y);
     }
+    for (let i = 0; i < numberOfVertices; ++i) {
+      for (let j = i + 1; j < numberOfVertices; ++j) {
+        if (i % 2 !== j % 2) {
+          const vertexOneName = i.toString();
+          const vertexTwoName = j.toString();
+          graph.addEdge(vertexOneName, vertexTwoName);
+        }
+      }
+  }
+    return graph
+  }
 
     static makeEmptyGraph() {
         return new Graph();
