@@ -7,6 +7,7 @@ import ShowMST from "./ShowMST.js"
 import BipartiteStat from "./BipartiteStat.js";
 import QuickDrawGraphs from "./DrawGraphs.js";
 import ViewAdjacenceMatrix from "./ViewAdjacencyMatrix.js";
+import ChromPolyStat from "./ChromPolyStat.js";
 
 const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysicsToggle, onShowQuickDrawToggle, onViewAdjacencyMatrix }) => {
   return (
@@ -51,6 +52,10 @@ const GraphStats = ({ graph, onShowBridgesToggle, onShowMSTToggle, onApplyPhysic
         <LineSeparator/>
         <ViewAdjacenceMatrix
           onClickView={onViewAdjacencyMatrix}
+          />
+        <LineSeparator />
+        <ChromPolyStat
+          graph={graph}
         />
     </div>
   );

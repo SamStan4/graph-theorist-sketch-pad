@@ -248,6 +248,23 @@ export default class Graph {
     getVertexList() {
         return Array.from(this.vertices.values());
     }
+  
+  
+    /**
+     * Retrieves the neighbors of a given vertex.
+     *
+     * @param {string} vertexName - The vertex whose neighbors are to be retrieved.
+     * @returns {Array} An array of neighboring vertices.
+     */
+    getNeighbors(vertexName) {
+      const edgeSet = new Set();
+      if (this.edges.has(vertexName)) {
+        for (const neighborName of this.edges.get(vertexName)) {
+          edgeSet.add(neighborName);
+        }
+      }
+      return Array.from(edgeSet);
+    }
 
     /**
      * Gets all looping vertices
