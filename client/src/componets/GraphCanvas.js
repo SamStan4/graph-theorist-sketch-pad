@@ -11,7 +11,7 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
   const vertexColor = (255, 255, 255);
   const textColor = (0, 0, 0);
   const bridgeThickness = 2;
-  const loopOffset = 10;
+  const loopOffset = 0;
   const loopDiameter = 25;
 
   useEffect(() => {
@@ -43,14 +43,46 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
         p.fill(backgroundColor);
         if (!showMST) {
           for (let i = 0; i < loopingEdgeVertexList.length; ++i) {
-            const xPos = (loopingEdgeVertexList[i].getXConversion(sideLength)) + loopOffset;
-            const yPos = (loopingEdgeVertexList[i].getYConversion(sideLength)) - loopOffset;
-            p.ellipse(
-              xPos,
-              yPos,
-              loopDiameter,
-              loopDiameter
-            );
+            const loopVertex = loopingEdgeVertexList[i];
+            const xPos = loopVertex.getXConversion(sideLength) + loopOffset;
+            const yPos = loopVertex.getYConversion(sideLength) - loopOffset;
+            const loopWidth = loopDiameter * 1.7; // Elongate the loop
+            const loopHeight = loopDiameter; // Keep the original diameter for height
+
+            // Find the nearest vertex
+            let nearestVertex = null;
+            let minDistance = Infinity;
+            for (let j = 0; j < vertexList.length; ++j) {
+              const vertex = vertexList[j];
+              if (vertex !== loopVertex) {
+                const distance = Math.hypot(
+                  vertex.getXConversion(sideLength) - xPos,
+                  vertex.getYConversion(sideLength) - yPos
+                );
+                if (distance < minDistance) {
+                  minDistance = distance;
+                  nearestVertex = vertex;
+                }
+              }
+            }
+
+            // Calculate the angle away from the nearest vertex
+            let angle = 0;
+            if (nearestVertex) {
+              const nearestX = nearestVertex.getXConversion(sideLength);
+              const nearestY = nearestVertex.getYConversion(sideLength);
+              angle = Math.atan2(yPos - nearestY, xPos - nearestX) + Math.PI;
+            }
+
+            // Calculate the new position based on the angle
+            const newXPos = xPos - loopWidth * Math.cos(angle) / 2;
+            const newYPos = yPos - loopHeight * Math.sin(angle);
+
+            p.push();
+            p.translate(newXPos, newYPos);
+            p.rotate(angle);
+            p.ellipse(0, 0, loopWidth, loopHeight);
+            p.pop();
           }
         }
 
@@ -139,7 +171,7 @@ const GraphCanvas = ({graph, showBridges, showMST, applyPhysics, sideLength}) =>
     return () => {
       p5Instance.remove();
     };
-  }, [graph, sideLength, showBridges, showMST, applyPhysics]);
+  }, [graph, sideLength, showBridges, showMST, applyPhysics, backgroundColor, vertexColor, textColor]);
 
   return (
     <div
